@@ -1,4 +1,5 @@
 import './globals.css'
+import styles from './page.module.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Provider from './auth/provider'
@@ -19,7 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Provider>
-          {children}
+          <main className={styles.main}>
+            {children}
+          </main>
         </Provider>
       </body>
     </html>
