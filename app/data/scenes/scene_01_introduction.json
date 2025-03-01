@@ -1,0 +1,11 @@
+{
+    "id": "scene_01_introduction",
+    "title": "Introduction",
+    "location": "The Rusty Tankard",
+    "status": "closed",
+    "players": ["hhanuman@gmail.com", "player2@example.com"],
+    "messages": [
+      { "player": "Zoli", "content": "I enter the tavern and look around." },
+      { "player": "Robi", "content": "I nod at you from the bar." }
+    ]
+  }
