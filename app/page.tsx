@@ -40,7 +40,7 @@ function page() {
   }, [session]);
 
   return (
-    <main className={styles.main}>
+    <>
       <h1>Welcome {session != null ? session?.user?.name : 'Guest'} !</h1>
       {
         session?.user ? (
@@ -50,7 +50,7 @@ function page() {
             <button className={styles.authButton} onClick={() => handleGoogleSignIn(provider)} type='button' key={provider.name}>Sign In With {provider.name}</button>
           )))
       }
-    </main>
+    </>
   )
 }
 
