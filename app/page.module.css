@@ -1,0 +1,44 @@
+.main {
+  display: flex;
+  min-height: 420px;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;}
+
+.code {
+  font-weight: 700;
+  font-family: var(--font-mono);}
+
+.logo {
+  position: relative;}
+
+/*Added By Nhilesh Baua*/
+.authButton {
+  width: 204px;
+    height: 42px;
+    background-color: #336699;
+    border: 1px solid #333333;
+    border-radius: 25px;
+    margin: 11px 11px 0 0;
+    color: white;
+    font-size: 14px;
+    letter-spacing: 0.2px;
+    cursor: pointer;
+}
+
+.unauthButton {
+  width: 204px;
+  height: 42px;
+  color: #336699;
+  border: 1px solid #336699;
+  border-radius: 25px;
+  margin: 11px 11px 0 0;
+  background-color: white;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  cursor: pointer; 
+}
+
+.authIcon {
+  width: 128px;
+  height: 128px;}
