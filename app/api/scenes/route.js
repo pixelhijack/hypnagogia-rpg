@@ -42,8 +42,12 @@ export async function POST(req) {
             })
             .find(scene => scene.id === sceneId);
         
+        const messagesByUser = sceneToUpdate.messages.filter(message => message.character === player.character);
+        if(messagesByUser.length > 3) {
+            return new Response(JSON.stringify({ error: "Too many messages" }), { status: 500 });
+        }
         sceneToUpdate.messages.push({ 
-            player: session.user.name,
+            character: player.character,
             updated: new Date().toISOString(), 
             content 
         });

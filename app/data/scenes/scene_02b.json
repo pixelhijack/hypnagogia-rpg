@@ -14,7 +14,7 @@
       {
         "content": "Ezt a fejezetet csak a rangidős inkvizítorok láthatják"
       },
-      { "player": "Domus Excilio", "content": "répa" },
-      { "player": "Praetor Oculus", "content": "retek" }
+      { "character": "Domus Excilio", "content": "répa" },
+      { "character": "Praetor Oculus", "content": "retek" }
     ]
   }
