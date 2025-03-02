@@ -1,0 +1,11 @@
+{
+    "id": "scene_03_cathedral",
+    "title": "Harmadik fejezet",
+    "location": "Cathedral",
+    "status": "active",
+    "players": ["hhanuman@gmail.com", "player2@example.com"],
+    "messages": [
+      { "player": "Zoli", "content": "I enter the tavern and look around..." },
+      { "player": "Tomi", "content": "I nod at you from the bar." }
+    ]
+  }
