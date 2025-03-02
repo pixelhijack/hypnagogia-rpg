@@ -37,7 +37,27 @@ function Landing() {
     }
   }, [session, data, setData]);
 
-  if (!data) return <p>Loading...</p>;
+  if(!session) {
+    return (
+      <>
+        <h1>Hypnagogia RPG</h1>
+        <p>Meghívott vagy? Próbálj belépni, és kiderül!</p>
+        {
+          (authProviders && Object.values(authProviders).map((provider) => (
+            <button className={styles.authButton} onClick={() => handleGoogleSignIn(provider)} type='button' key={provider.name}>Sign In With {provider.name}</button>
+          )))
+        }
+      </>
+    )
+  };
+  if (!data) {
+    return (
+      <>
+        <h1>Hypnagogia RPG</h1>
+        <p>Loading...</p>
+      </>
+    )
+  };
 
   const { player, scenes } = data;
 
@@ -52,9 +72,10 @@ function Landing() {
   console.log('CLIENT: data provider, landing page', scenes);
   return (
     <>
+      <h1>Hypnagogia RPG</h1>
       {
         session && (
-          <h1>Isten hozott, Inkvizítor {player && player.character} !</h1>
+          <h2>Isten hozott, Inkvizítor {player && player.character} !</h2>
         )
       }
       {
@@ -64,7 +85,7 @@ function Landing() {
         session && (
           <>
             <hr style={{ width: "30%"}}/>
-            <h2>Fejezetek</h2>
+            <h3>Fejezetek</h3>
           </>
         )
       }
@@ -77,12 +98,9 @@ function Landing() {
         session && !scenes && (<p>Loading...</p>)
       }
       {
-        session?.user ? (
+        session?.user && (
           <button className={styles.unauthButton} onClick={() => handleGoogleSignOut()} type='button'>Sign Out From Google</button>
-        ) :
-          (authProviders && Object.values(authProviders).map((provider) => (
-            <button className={styles.authButton} onClick={() => handleGoogleSignIn(provider)} type='button' key={provider.name}>Sign In With {provider.name}</button>
-          )))
+        )
       }
     </>
   )

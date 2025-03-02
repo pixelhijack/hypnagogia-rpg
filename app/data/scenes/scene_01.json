@@ -2,14 +2,15 @@
   "id": "scene_01",
   "title": "Első fejezet",
   "location": "The Rusty Tankard",
-  "status": "closed",
+  "startDate": "2024-10-14",
+  "endDate": "2024-10-24",
   "players": [
     "hhanuman@gmail.com",
     "player2@example.com"
   ],
   "messages": [
     {
-      "content": "Ez egy hosszabb leírás"
+      "content": "Ez egy hosszabb leírás lesz"
     },
     {
       "player": "Zoli",
