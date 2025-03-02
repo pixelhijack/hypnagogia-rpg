@@ -1,24 +1,29 @@
 {
   "id": "scene_01",
+  "chapter": "1: Déia",
   "title": "Első fejezet",
   "location": "The Rusty Tankard",
   "startDate": "2024-10-14",
   "endDate": "2024-10-24",
   "players": [
     "hhanuman@gmail.com",
-    "player2@example.com"
+    "robert@hrobert.hu",
+    "domokos.zoltan.domokos@gmail.com",
+    "falusi.andras@gmail.com",
+    "imreta@gmail.com",
+    "imrezo@gmail.com"
   ],
   "messages": [
     {
-      "content": "Ez egy hosszabb leírás lesz"
+      "content": "Ezt a fejezetet mindenki láthatja"
     },
     {
-      "player": "Zoli",
-      "content": "Zoli azt mondja, ..."
+      "player": "Valoris",
+      "content": "alma"
     },
     {
-      "player": "Robi",
-      "content": "# This is a H1  \n## This is a H2  \n###### This is a H6"
+      "player": "Domus Excilio",
+      "content": "körte"
     }
   ]
 }

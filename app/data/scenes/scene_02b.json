@@ -1,0 +1,20 @@
+{
+    "id": "scene_02",
+    "chapter": "1: Déia",
+    "title": "Második fejezet - rangidősöknek",
+    "location": "The Gates",
+    "startDate": "2024-11-14",
+    "endDate": "2024-11-24",
+    "players": [
+      "hhanuman@gmail.com",
+      "robert@hrobert.hu",
+      "domokos.zoltan.domokos@gmail.com"
+    ],
+    "messages": [
+      {
+        "content": "Ezt a fejezetet csak a rangidős inkvizítorok láthatják"
+      },
+      { "player": "Domus Excilio", "content": "répa" },
+      { "player": "Praetor Oculus", "content": "retek" }
+    ]
+  }

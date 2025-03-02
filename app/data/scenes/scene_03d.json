@@ -1,0 +1,18 @@
+{
+    "id": "scene_03",
+    "chapter": "1: Déia",
+    "title": "Harmadik fejezet - Vortis",
+    "location": "Cathedral",
+    "startDate": "2025-01-01",
+    "endDate": "2025-02-15",
+    "players": [
+        "hhanuman@gmail.com",
+        "imreta@gmail.com"
+    ],
+    "messages": [
+      {
+        "content": "Ezt a fejezetet egyedül csak te láthatod"
+      },
+      { "player": "Vortis", "content": "Titkos zöldséged: a hónapos retek" }
+    ]
+  }
