@@ -6,7 +6,9 @@ import Link from 'next/link';
 
 export default function RequestedFromApi({ params }) {
     const { data: session } = useSession();
+    const [player, setPlayer] = useState();
     const { data: scenes, setData: setScenes } = useData();
+    const scene = scenes && scenes.find(sc => sc.id === params.id);
 
     console.log('============');
     console.log('/fromapi/[id]/page.js', params)
@@ -21,7 +23,10 @@ export default function RequestedFromApi({ params }) {
         if(!scenes) {
             fetch("/api/scenes")
                 .then(response => response.json())
-                .then(setScenes)
+                .then(json => {
+                    setScenes(json.scenes);
+                    setPlayer(json.player);
+                })
                 .catch(error => {
                 console.log('ERROR: /api/scenes', error);
                 });
@@ -30,9 +35,12 @@ export default function RequestedFromApi({ params }) {
     
     return (
         <>
+            {!session && <Link href={`/`}>Menj a kezdőoldalra és lépj be</Link>}
             {!scenes && <p>Loading...</p>}
-            {scenes && <h2>Chapter: {params.id}</h2>}
-            {!session && <Link href={`/`}>Go to Home to sign in</Link>}
+            {scenes && <h2>Fejezet: {scene.title}</h2>}
+            {scene && scene.messages.map((message, i) => (
+                <div key={i}>{message.content}</div>
+            ))}
         </>
     );
 }

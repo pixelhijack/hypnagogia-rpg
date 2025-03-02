@@ -52,17 +52,17 @@ function page() {
     <>
       {
         session && (
-          <h1>Welcome {player && player.character} !</h1>
+          <h1>Isten hozott, Inkvizítor {player && player.character} !</h1>
         )
       }
       {
-        !session && (<h1>Are you invited to this party? Try and see</h1>)
+        !session && (<p>Meghívott vagy? Próbálj belépni, és kiderül!</p>)
       }
       {
         session && (
           <>
             <hr style={{ width: "30%"}}/>
-            <h2>Chapters</h2>
+            <h2>Fejezetek</h2>
           </>
         )
       }
