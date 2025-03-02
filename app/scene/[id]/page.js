@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useSession } from 'next-auth/react'
 import { useData } from "../../context/DataContext";
 import Link from 'next/link';
+import MarkdownRenderer from 'react-markdown-renderer';
 
 export default function RequestedFromApi({ params }) {
     const { data: session } = useSession();
@@ -39,7 +40,9 @@ export default function RequestedFromApi({ params }) {
             {!session && <Link href={`/`}>Menj a kezdőoldalra és lépj be</Link>}
             {scenes && <h2>Fejezet: {scene.title}</h2>}
             {scene && scene.messages.map((message, i) => (
-                <div key={i}>{message.content}</div>
+                <div key={i}>
+                    <MarkdownRenderer markdown={message.content} />
+                </div>
             ))}
         </>
     );
