@@ -11,10 +11,10 @@ import { useData } from "./context/DataContext";
 function page() {
   const provider = null;
   const [authProviders, setAuthProviders] = useState(provider);
-  const { data: scenes, setData: setScenes } = useData();
-
   const { data: session } = useSession();
-  const profileImage = session?.user?.image;
+
+  const [player, setPlayer] = useState();
+  const { data: scenes, setData: setScenes } = useData();
 
   useEffect(() => {
     const setProviders = async () => {
@@ -38,7 +38,8 @@ function page() {
         .then(response => response.json())
         .then(json => {
           console.log('CLIENT: /api/scenes response', json);
-          setScenes(json);
+          setScenes(json.scenes);
+          setPlayer(json.player);
         })
         .catch(error => {
           console.log('ERROR: /api/scenes', error);
@@ -50,9 +51,12 @@ function page() {
   return (
     <>
       {
-        session != null ? (
-          <h1>Welcome {session?.user?.name} !</h1>
-        ) : (<h1>Are you invited to this party? Try and see</h1>)
+        session && (
+          <h1>Welcome {player && player.character} !</h1>
+        )
+      }
+      {
+        !session && (<h1>Are you invited to this party? Try and see</h1>)
       }
       {
         session && (
