@@ -5,11 +5,13 @@ import { signIn, signOut, getProviders, useSession } from 'next-auth/react'
 import { useState, useEffect } from "react";
 import React from 'react'
 import Link from 'next/link';
+import { useData } from "./context/DataContext";
+
 
 function page() {
   const provider = null;
   const [authProviders, setAuthProviders] = useState(provider);
-  const [scenes, setScenes] = useState(provider);
+  const { data: scenes, setData: setScenes } = useData();
 
   const { data: session } = useSession();
   const profileImage = session?.user?.image;
@@ -31,7 +33,7 @@ function page() {
   }
 
   useEffect(() => {
-    if (session) {
+    if (session && !scenes) {
       fetch("/api/scenes")
         .then(response => response.json())
         .then(json => {
@@ -42,8 +44,9 @@ function page() {
           console.log('ERROR: /api/scenes', error);
         });
     }
-  }, [session]);
+  }, [session, scenes, setScenes]);
 
+  console.log('CLIENT: data provider, landing page', scenes);
   return (
     <>
       {
@@ -52,9 +55,20 @@ function page() {
         ) : (<h1>Are you invited to this party? Try and see</h1>)
       }
       {
+        session && (
+          <>
+            <hr style={{ width: "30%"}}/>
+            <h2>Chapters</h2>
+          </>
+        )
+      }
+      {
         session && scenes && scenes.map(scene => (
           <Link key={scene.id} href={`scene/${scene.id}`}>{scene.title}</Link>
         ))
+      }
+      {
+        session && !scenes && (<p>Loading...</p>)
       }
       {
         session?.user ? (
