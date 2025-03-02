@@ -42,7 +42,11 @@ export async function POST(req) {
             })
             .find(scene => scene.id === sceneId);
         
-        sceneToUpdate.messages.push({ player: session.user.name, content });
+        sceneToUpdate.messages.push({ 
+            player: session.user.name,
+            updated: new Date().toISOString(), 
+            content 
+        });
         console.log('========= sceneToUpdate', sceneToUpdate);
 
         // save file
