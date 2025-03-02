@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react'
 import { useData } from "../../context/DataContext";
 import Link from 'next/link';
 import MarkdownRenderer from 'react-markdown-renderer';
+import moment from 'moment';
 
 export default function RequestedFromApi({ params }) {
     const { data: session } = useSession();
@@ -45,10 +46,14 @@ export default function RequestedFromApi({ params }) {
     const { player, scenes } = data;
     const scene = scenes && scenes.find(sc => sc.id === params.id);
 
+    const daysRemaining = scene ? moment(scene.endDate).diff(moment(), 'days') : null;
+    const hoursRemaining = scene ? moment(scene.endDate).diff(moment(), 'hours') % 24 : null;
+
     console.log('============');
     console.log('/fromapi/[id]/page.js', params)
     console.log('CLIENT: data provider, sub page', scenes, scene);
     console.log('============');
+    console.log('============ moment', moment(scene.endDate).isAfter(moment()));
     
     return (
         <>
@@ -59,9 +64,16 @@ export default function RequestedFromApi({ params }) {
                     <MarkdownRenderer markdown={message.content} />
                 </div>
             ))}
-
-            <input placeholder={`A karaktered ezt teszi / mondja...`} value={message} onChange={e => setMessage(e.target.value)} />
-            <button onClick={() => sendMessage(scene.id)}>Hozzászólás</button>
+            {
+                scene && moment(scene.endDate).isAfter(moment()) && (
+                    <>
+                        <hr/>
+                        <input placeholder={`A karaktered ezt teszi / mondja...`} value={message} onChange={e => setMessage(e.target.value)} />
+                        <button onClick={() => sendMessage(scene.id)}>Hozzászólás</button>
+                        <i>Hátralévő idő a fejezet zárásáig: még {daysRemaining} nap {hoursRemaining} óra...</i>
+                    </>
+                )
+            }
         </>
     );
 }
