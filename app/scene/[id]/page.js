@@ -61,7 +61,7 @@ export default function RequestedFromApi({ params }) {
             {scenes && <h2>Fejezet: {scene.title}</h2>}
             {scene && scene.messages.map((message, i) => (
                 <div key={i}>
-                    <MarkdownRenderer markdown={message.content} />
+                    <span>{message.player ? `${message.player}: ` : ''}</span><MarkdownRenderer markdown={message.content} />
                 </div>
             ))}
             {

@@ -1,0 +1,18 @@
+{
+    "id": "scene_03",
+    "chapter": "1: Déia",
+    "title": "Harmadik fejezet - Praetor Oculus",
+    "location": "Cathedral",
+    "startDate": "2025-01-01",
+    "endDate": "2025-02-15",
+    "players": [
+        "hhanuman@gmail.com",
+        "robert@hrobert.hu"
+    ],
+    "messages": [
+      {
+        "content": "Ezt a fejezetet egyedül csak te láthatod"
+      },
+      { "player": "Praetor Oculus", "content": "Titkos zöldséged: a zellerszár" }
+    ]
+  }
