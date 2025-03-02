@@ -1,8 +1,11 @@
 'use client';
 import { useState, useEffect } from "react";
+import { useSession } from 'next-auth/react'
 import { useData } from "../../context/DataContext";
+import Link from 'next/link';
 
 export default function RequestedFromApi({ params }) {
+    const { data: session } = useSession();
     const { data: scenes, setData: setScenes } = useData();
 
     console.log('============');
@@ -25,12 +28,11 @@ export default function RequestedFromApi({ params }) {
         }
       }, [scenes]);
     
-
-    return !scenes ? (
-        <p>Loading...</p>
-    ) : (
+    return (
         <>
-            <p>This is a dynamically routed page requesting local api: {params.id}</p>
+            {!scenes && <p>Loading...</p>}
+            {scenes && <h2>Chapter: {params.id}</h2>}
+            {!session && <Link href={`/`}>Go to Home to sign in</Link>}
         </>
-    )
+    );
 }
