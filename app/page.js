@@ -8,13 +8,12 @@ import Link from 'next/link';
 import { useData } from "./context/DataContext";
 
 
-function page() {
+function Landing() {
   const provider = null;
   const [authProviders, setAuthProviders] = useState(provider);
   const { data: session } = useSession();
-
-  const [player, setPlayer] = useState();
-  const { data: scenes, setData: setScenes } = useData();
+  //const { data: scenes, setData: setScenes } = useData();
+  const { data, setData } = useData();
 
   useEffect(() => {
     const setProviders = async () => {
@@ -24,6 +23,24 @@ function page() {
     setProviders();
   }, [])
 
+  useEffect(() => {
+    if (session && !data) {
+      fetch("/api/scenes")
+        .then(response => response.json())
+        .then(json => {
+          console.log('CLIENT: /api/scenes response', json);
+          setData(json);
+        })
+        .catch(error => {
+          console.log('ERROR: /api/scenes', error);
+        });
+    }
+  }, [session, data, setData]);
+
+  if (!data) return <p>Loading...</p>;
+
+  const { player, scenes } = data;
+
   function handleGoogleSignIn(_provider) {
     const response = signIn(_provider.id);
   }
@@ -31,21 +48,6 @@ function page() {
   function handleGoogleSignOut() {
     signOut();
   }
-
-  useEffect(() => {
-    if (session && !scenes) {
-      fetch("/api/scenes")
-        .then(response => response.json())
-        .then(json => {
-          console.log('CLIENT: /api/scenes response', json);
-          setScenes(json.scenes);
-          setPlayer(json.player);
-        })
-        .catch(error => {
-          console.log('ERROR: /api/scenes', error);
-        });
-    }
-  }, [session, scenes, setScenes]);
 
   console.log('CLIENT: data provider, landing page', scenes);
   return (
@@ -86,4 +88,4 @@ function page() {
   )
 }
 
-export default page
+export default Landing;

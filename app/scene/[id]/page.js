@@ -6,37 +6,37 @@ import Link from 'next/link';
 
 export default function RequestedFromApi({ params }) {
     const { data: session } = useSession();
-    const [player, setPlayer] = useState();
-    const { data: scenes, setData: setScenes } = useData();
-    const scene = scenes && scenes.find(sc => sc.id === params.id);
-
-    console.log('============');
-    console.log('/fromapi/[id]/page.js', params)
-    console.log('CLIENT: data provider, sub page', scenes);
-    console.log('============');
-    
+    const { data, setData } = useData();
     
     useEffect(() => {
         // if we got here from landing page, there is already data by the data provider
         // however if opened this subpage directly, data provider cannot provide data from a prev page
         // therefore we need to fetch it
-        if(!scenes) {
+        if(!data) {
             fetch("/api/scenes")
                 .then(response => response.json())
                 .then(json => {
-                    setScenes(json.scenes);
-                    setPlayer(json.player);
+                    setData(json);
                 })
                 .catch(error => {
-                console.log('ERROR: /api/scenes', error);
+                    console.log('ERROR: /api/scenes', error);
                 });
         }
-      }, [scenes]);
+    }, [data, setData]);
+
+    if (!data) return <p>Loading...</p>;
+
+    const { player, scenes } = data;
+    const scene = scenes && scenes.find(sc => sc.id === params.id);
+
+    console.log('============');
+    console.log('/fromapi/[id]/page.js', params)
+    console.log('CLIENT: data provider, sub page', scenes, scene);
+    console.log('============');
     
     return (
         <>
             {!session && <Link href={`/`}>Menj a kezdőoldalra és lépj be</Link>}
-            {!scenes && <p>Loading...</p>}
             {scenes && <h2>Fejezet: {scene.title}</h2>}
             {scene && scene.messages.map((message, i) => (
                 <div key={i}>{message.content}</div>
