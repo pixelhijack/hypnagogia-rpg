@@ -10,30 +10,17 @@
   font-family: var(--font-mono);}
 
 .logo {
-  position: relative;}
-
-/*Added By Nhilesh Baua*/
-.authButton {
-  width: 204px;
-    height: 42px;
-    background-color: #336699;
-    border: 1px solid #333333;
-    border-radius: 25px;
-    margin: 11px 11px 0 0;
-    color: white;
-    font-size: 14px;
-    letter-spacing: 0.2px;
-    cursor: pointer;
+  position: relative;
 }
 
+.authButton, 
 .unauthButton {
-  width: 204px;
-  height: 42px;
-  color: #336699;
-  border: 1px solid #336699;
-  border-radius: 25px;
-  margin: 11px 11px 0 0;
-  background-color: white;
+  padding: 5px;
+  color: grey;
+  border: 1px solid grey;
+  border-radius: 5px;
+  margin: 50px 0 0 0;
+  background-color: black;
   font-size: 14px;
   letter-spacing: 0.2px;
   cursor: pointer; 
@@ -41,4 +28,5 @@
 
 .authIcon {
   width: 128px;
-  height: 128px;}
+  height: 128px;
+}

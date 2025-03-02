@@ -3,6 +3,7 @@ import styles from './page.module.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Provider from './auth/provider'
+import { DataProvider } from "./context/DataContext";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,9 +21,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Provider>
-          <main className={styles.main}>
-            {children}
-          </main>
+          <DataProvider>
+            <main className={styles.main}>
+              {children}
+            </main>
+          </DataProvider>
         </Provider>
       </body>
     </html>
