@@ -15,8 +15,8 @@
       {
         "content": "Ezt a fejezetet csak a corpus ifjú inkivizítorai láthatják"
       },
-      { "player": "Valoris", "content": "ananász" },
-      { "player": "Vortis", "content": "banán" },
-      { "player": "Gladius", "content": "licsi" }
+      { "character": "Valoris", "content": "ananász" },
+      { "character": "Vortis", "content": "banán" },
+      { "character": "Gladius", "content": "licsi" }
     ]
   }
