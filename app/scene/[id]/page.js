@@ -73,10 +73,10 @@ export default function RequestedFromApi({ params }) {
                         {typeof remainingMessages === 'number' && <h6>Még {remainingMessages} üzenetet küldhetsz</h6>}
                         <input placeholder={`A karaktered ezt teszi / mondja...`} value={message} onChange={e => setMessage(e.target.value)} />
                         <button onClick={() => sendMessage(scene.id)}>Hozzászólás</button>
+                        <i>Hátralévő idő a fejezet zárásáig: még {daysRemaining} nap {hoursRemaining} óra...</i>
                     </>
                 )
             }
-            <i>Hátralévő idő a fejezet zárásáig: még {daysRemaining} nap {hoursRemaining} óra...</i>
         </>
     );
 }
