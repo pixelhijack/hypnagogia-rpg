@@ -16,7 +16,7 @@ export async function GET(req) {
         return scene;
     })
     .filter(scene => scene.players.includes(session.user.email));
-  console.log('========= scenePath', player, scenes);
+  console.log('========= GET /api/scenes', player);
   
   return Response.json({player, scenes});
 }
@@ -27,7 +27,6 @@ export async function POST(req) {
   
     try {
         const body = await req.json(); // Parse the request body
-        console.log('========= POST', body);
         const { sceneId, content } = body;
   
         // get player character name
@@ -43,6 +42,9 @@ export async function POST(req) {
             .find(scene => scene.id === sceneId);
         
         const messagesByUser = sceneToUpdate.messages.filter(message => message.character === player.character);
+
+        console.log('========= POST /api/scenes', player, sceneToUpdate);
+
         if(messagesByUser.length > 3) {
             return new Response(JSON.stringify({ error: "Too many messages" }), { status: 500 });
         }
@@ -51,7 +53,6 @@ export async function POST(req) {
             updated: new Date().toISOString(), 
             content 
         });
-        console.log('========= sceneToUpdate', sceneToUpdate);
 
         // save file
         const sceneFilePath = path.join(process.cwd(), "app/data/scenes", `${sceneId}.json`);

@@ -53,9 +53,7 @@ export default function RequestedFromApi({ params }) {
 
     console.log('============');
     console.log('/fromapi/[id]/page.js', params)
-    console.log('CLIENT: data provider, sub page', scenes, scene);
     console.log('============');
-    console.log('============ moment', moment(scene.endDate).isAfter(moment()));
     
     return (
         <>
