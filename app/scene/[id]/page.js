@@ -8,22 +8,37 @@ import MarkdownRenderer from 'react-markdown-renderer';
 export default function RequestedFromApi({ params }) {
     const { data: session } = useSession();
     const { data, setData } = useData();
+    const [message, setMessage] = useState("");
+
+    const getScenes = () => {
+        fetch("/api/scenes")
+            .then(response => response.json())
+            .then(json => {
+                setData(json);
+            })
+            .catch(error => {
+                console.log('ERROR: /api/scenes', error);
+            });
+    }
     
     useEffect(() => {
         // if we got here from landing page, there is already data by the data provider
         // however if opened this subpage directly, data provider cannot provide data from a prev page
         // therefore we need to fetch it
         if(!data) {
-            fetch("/api/scenes")
-                .then(response => response.json())
-                .then(json => {
-                    setData(json);
-                })
-                .catch(error => {
-                    console.log('ERROR: /api/scenes', error);
-                });
+            getScenes();
         }
     }, [data, setData]);
+
+    const sendMessage = async (sceneId) => {
+        await fetch(`/api/scenes`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sceneId, content: message })
+        });
+        setMessage("");
+        getScenes();
+      };
 
     if (!data) return <p>Loading...</p>;
 
@@ -44,6 +59,9 @@ export default function RequestedFromApi({ params }) {
                     <MarkdownRenderer markdown={message.content} />
                 </div>
             ))}
+
+            <input placeholder={`A karaktered ezt teszi / mondja...`} value={message} onChange={e => setMessage(e.target.value)} />
+            <button onClick={() => sendMessage(scene.id)}>Hozzászólás</button>
         </>
     );
 }
