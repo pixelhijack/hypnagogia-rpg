@@ -48,8 +48,8 @@ export default function RequestedFromApi({ params }) {
 
     const daysRemaining = scene ? moment(scene.endDate).diff(moment(), 'days') : null;
     const hoursRemaining = scene ? moment(scene.endDate).diff(moment(), 'hours') % 24 : null;
-    const messagesByUser = scene.messages.filter(message => message.character === player.character);
-    const remainingMessages = 3 - messagesByUser.length;
+    //const messagesByUser = scene.messages?.filter(message => message.character === player.character);
+    //const remainingMessages = 3 - messagesByUser.length;
 
     console.log('============');
     console.log('/fromapi/[id]/page.js', params)
@@ -59,11 +59,12 @@ export default function RequestedFromApi({ params }) {
         <>
             {!session && <Link href={`/`}>Menj a kezdőoldalra és lépj be</Link>}
             {scenes && <h2>Fejezet: {scene.title}</h2>}
-            {scene && scene.messages.map((message, i) => (
+            {/*scene && scene.messages.map((message, i) => (
                 <div key={i}>
                     <span>{message.character ? `${message.character}: ` : ''}</span><MarkdownRenderer markdown={message.content} />
                 </div>
-            ))}
+            ))*/}
+            {scene && <div dangerouslySetInnerHTML={{ __html: scene.content }} /> }
             {
                 scene && moment(scene.endDate).isAfter(moment()) && !!remainingMessages && (
                     <>
@@ -71,7 +72,6 @@ export default function RequestedFromApi({ params }) {
                         {typeof remainingMessages === 'number' && <h6>Még {remainingMessages} üzenetet küldhetsz</h6>}
                         <input placeholder={`A karaktered ezt teszi / mondja...`} value={message} onChange={e => setMessage(e.target.value)} />
                         <button onClick={() => sendMessage(scene.id)}>Hozzászólás</button>
-                        <i>Hátralévő idő a fejezet zárásáig: még {daysRemaining} nap {hoursRemaining} óra...</i>
                     </>
                 )
             }

@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Provider from './auth/provider'
 import { DataProvider } from "./context/DataContext";
+import Link from 'next/link'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,9 +23,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <Provider>
           <DataProvider>
+            <header className={styles.header}><Link href='/'> ☜  </Link></header>
             <main className={styles.main}>
               {children}
             </main>
+            <footer className={styles.footer}>♣♦♠</footer>
           </DataProvider>
         </Provider>
       </body>

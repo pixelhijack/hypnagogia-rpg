@@ -1,0 +1,137 @@
+{
+    "scene_00": {
+        "id": "scene_00",
+        "chapter": "1: Déia",
+        "title": "Bevezető",
+        "location": "The Rusty Tankard",
+        "startDate": "2024-10-14",
+        "endDate": "2024-10-24",
+        "players": [
+            "hhanuman@gmail.com",
+            "robert@hrobert.hu",
+            "domokos.zoltan.domokos@gmail.com",
+            "falusi.andras@gmail.com",
+            "imreta@gmail.com",
+            "imrezo@gmail.com"
+        ]
+    }, 
+    "scene_01": {
+        "id": "scene_01",
+        "chapter": "1: Déia",
+        "title": "Első fejezet",
+        "location": "The Rusty Tankard",
+        "startDate": "2024-10-14",
+        "endDate": "2024-10-24",
+        "players": [
+            "hhanuman@gmail.com",
+            "robert@hrobert.hu",
+            "domokos.zoltan.domokos@gmail.com",
+            "falusi.andras@gmail.com",
+            "imreta@gmail.com",
+            "imrezo@gmail.com"
+        ]
+    },
+    "scene_02": {
+        "id": "scene_02",
+        "chapter": "1: Déia",
+        "title": "Második fejezet - ifjú corpus tagoknak",
+        "location": "The Gates",
+        "startDate": "2024-11-14",
+        "endDate": "2024-11-24",
+        "players": [
+        "hhanuman@gmail.com",
+        "falusi.andras@gmail.com",
+        "imreta@gmail.com",
+        "imrezo@gmail.com"
+        ]
+    },
+    "scene_02b": {
+        "id": "scene_02",
+        "chapter": "1: Déia",
+        "title": "Második fejezet - rangidősöknek",
+        "location": "The Gates",
+        "startDate": "2024-11-14",
+        "endDate": "2024-11-24",
+        "players": [
+        "hhanuman@gmail.com",
+        "robert@hrobert.hu",
+        "domokos.zoltan.domokos@gmail.com"
+        ]
+    },
+    "scene_03": {
+        "id": "scene_03",
+        "chapter": "1: Déia",
+        "title": "Harmadik fejezet - ez egy aktív fejezet!",
+        "location": "Cathedral",
+        "startDate": "2025-01-01",
+        "endDate": "2025-03-05",
+        "players": [
+            "hhanuman@gmail.com",
+            "robert@hrobert.hu",
+            "domokos.zoltan.domokos@gmail.com",
+            "falusi.andras@gmail.com",
+            "imreta@gmail.com",
+            "imrezo@gmail.com"
+        ]
+    },
+    "scene_03b": {
+        "id": "scene_03b",
+        "chapter": "1: Déia",
+        "title": "Harmadik fejezet - Gladius",
+        "location": "Cathedral",
+        "startDate": "2025-01-01",
+        "endDate": "2025-02-15",
+        "players": [
+            "hhanuman@gmail.com",
+            "falusi.andras@gmail.com"
+        ]
+    },
+    "scene_03c": {
+        "id": "scene_03c",
+        "chapter": "1: Déia",
+        "title": "Harmadik fejezet - Valoris",
+        "location": "Cathedral",
+        "startDate": "2025-01-01",
+        "endDate": "2025-02-15",
+        "players": [
+            "hhanuman@gmail.com",
+            "imrezo@gmail.com"
+        ]
+    },
+    "scene_03d": {
+        "id": "scene_03d",
+        "chapter": "1: Déia",
+        "title": "Harmadik fejezet - Vortis",
+        "location": "Cathedral",
+        "startDate": "2025-01-01",
+        "endDate": "2025-02-15",
+        "players": [
+            "hhanuman@gmail.com",
+            "imreta@gmail.com"
+        ]
+    },
+    "scene_02e": {
+        "id": "scene_03e",
+        "chapter": "1: Déia",
+        "title": "Harmadik fejezet - Excilio",
+        "location": "Cathedral",
+        "startDate": "2025-01-01",
+        "endDate": "2025-02-15",
+        "players": [
+            "hhanuman@gmail.com",
+            "domokos.zoltan.domokos@gmail.com"
+        ]
+    },
+    "scene_03f": {
+        "id": "scene_03f",
+        "chapter": "1: Déia",
+        "title": "Harmadik fejezet - Praetor Oculus",
+        "location": "Cathedral",
+        "startDate": "2025-01-01",
+        "endDate": "2025-02-15",
+        "players": [
+            "hhanuman@gmail.com",
+            "robert@hrobert.hu"
+        ]
+    }
+}

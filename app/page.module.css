@@ -41,3 +41,25 @@
   width: 128px;
   height: 128px;
 }
+
+.header {
+  font-size: 2em;
+  position: absolute;
+  top: 20px;
+  left: 25px;
+  transform: translate(-50%, -50%);
+  letter-spacing: -20px;
+}
+.header a { 
+  cursor: pointer; 
+  min-width: 40px;
+  display: inline-block;
+}
+.header a:hover {
+  text-decoration: none;
+  transform: translateX(10px);
+}
+.footer {
+  text-align: center;
+  margin: 15px 0 30px 0;
+}

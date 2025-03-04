@@ -75,7 +75,7 @@ function Landing() {
       <h1>Hypnagogia RPG - teszt verzió</h1>
       {
         session && (
-          <h2>Isten hozott, Inkvizítor {player && player.character} !</h2>
+          <h2>Isten hozott, Inkvizítor {player && player.character}!</h2>
         )
       }
       {
