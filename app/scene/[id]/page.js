@@ -5,6 +5,7 @@ import { useData } from "../../context/DataContext";
 import Link from 'next/link';
 import MarkdownRenderer from 'react-markdown-renderer';
 import moment from 'moment';
+import chapter01 from '../../data/md/1.1.md';
 
 export default function RequestedFromApi({ params }) {
     const { data: session } = useSession();
@@ -61,7 +62,7 @@ export default function RequestedFromApi({ params }) {
             {scenes && <h2>Fejezet: {scene.title}</h2>}
             {scene && scene.messages.map((message, i) => (
                 <div key={i}>
-                    <span>{message.character ? `${message.character}: ` : ''}</span><MarkdownRenderer markdown={message.content} />
+                    <span>{message.character ? `${message.character}: ` : ''}</span><MarkdownRenderer markdown={chapter01} />
                 </div>
             ))}
             {
