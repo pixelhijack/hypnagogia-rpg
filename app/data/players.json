@@ -1,30 +1,37 @@
 [
     {
         "email": "pothattila@gmail.com",
-        "character": "KM"
+        "character": "KM",
+        "shortName": "dm"
     },
     {
         "email": "hhanuman@gmail.com",
-        "character": "DM"
+        "character": "DM",
+        "shortName": "dm"
     },
     {
         "email": "domokos.zoltan.domokos@gmail.com",
-        "character": "Domus Excilio"
+        "character": "Domus Excilio",
+        "shortName": "excilio"
     },
     {
         "email": "robert@hrobert.hu",
-        "character": "Praetor Oculus"
+        "character": "Praetor Oculus",
+        "shortName": "oculus"
     },
     {
         "email": "falusi.andras@gmail.com",
-        "character": "Octavus Gladius"
+        "character": "Octavus Gladius",
+        "shortName": "gladius"
     },
     {
         "email": "imreta@gmail.com",
-        "character": "Decimus Vortis"
+        "character": "Decimus Vortis",
+        "shortName": "vortis"
     },
     {
         "email": "imrezo@gmail.com",
-        "character": "Decimus Valoris"
+        "character": "Decimus Valoris",
+        "shortName": "valoris"
     }
   ]
