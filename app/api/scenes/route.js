@@ -4,26 +4,80 @@ import { marked } from "marked";
 import { getServerSession } from "next-auth"; // Correct import for App Router
 import { authOptions } from "../auth/[...nextauth]/route"; // Adjust based on your setup
 import manifest from '../../data/manifest.json';
+import { start } from "repl";
+
+const GITHUB_REPO = "pixelhijack/rpg-scenes";
+const GITHUB_BRANCH = "master";
+const GITHUB_ACCESS_TOKEN = process.env.GITHUB_ACCESS_TOKEN; // Securely store token
+const googleScriptUrl = process.env.GOOGLE_SCRIPT_URL;
+
+async function getGithubFiles() {
+    try {
+        // 1️ Get list of files in the "scenes" folder
+        const fileListUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/hypnagogia?ref=${GITHUB_BRANCH}`;
+        
+        const fileListResponse = await fetch(fileListUrl, {
+            headers: GITHUB_ACCESS_TOKEN ? { Authorization: `token ${GITHUB_ACCESS_TOKEN}` } : {},
+        });
+
+        console.log('============= fileListResponse.status', fileListResponse.status);
+
+        if (!fileListResponse.ok) throw new Error("Failed to fetch file list");
+
+        const files = await fileListResponse.json();
+
+        // 2️ Extract markdown file URLs
+        const markdownFiles = files.filter(file => file.name.endsWith(".md"));
+
+        // 3️ Fetch content of each markdown file
+        const scenePromises = markdownFiles.map(async (file) => {
+            const fileResponse = await fetch(file.download_url);
+            const content = await fileResponse.text();
+            return { name: file.name, content };
+        });
+
+        const scenes = await Promise.all(scenePromises);
+        return scenes;
+    } catch(e) {
+        console.error("Failed to fetch scene files from GitHub", e);
+        return [];
+    }
+}
+  
 
 export async function GET(req) {
   const session = await getServerSession(authOptions);
   if (!session) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
 
-  const players = JSON.parse(fs.readFileSync(path.join(process.cwd(), "app/data/players.json"), "utf-8"));
-  const player = players.find(p => p.email === session.user.email);
+  //const remoteGithubFiles = await getGithubFiles();
 
-  const sceneDescriptors = Object.values(manifest).filter(scene => scene.players.includes(session.user.email));
+  return getGithubFiles().then((files) => {
+    console.log('========= remoteGithubFiles', files.length);
+    const players = JSON.parse(fs.readFileSync(path.join(process.cwd(), "app/data/players.json"), "utf-8"));
+    const player = players.find(p => p.email === session.user.email);
 
-    const scenes = sceneDescriptors.map(scene => {
-        const markdown = fs.readFileSync(path.join(process.cwd(), "app/data/md", `${scene.id}.md`), "utf-8");
+    const sceneMetas = Object.values(manifest).filter(scene => scene.players.includes(session.user.email));
+
+    const scenes = sceneMetas.map(scene => {
+        const markdown = files.find(file => file.name === `${scene.id}.md`)?.content || '';
         const parsed = marked(markdown);
         const slicedContent = sliceMarkdownByAtNames(markdown);
         console.log('============= slicedContent', slicedContent);
-        return { id: scene.id, title: scene.title, content: parsed.replace(/@\w+/g, ''), slicedContent };
+        return { 
+            id: scene.id, 
+            title: scene.title, 
+            startDate: scene.startDate,
+            endDate: scene.endDate,
+            content: parsed.replace(/@\w+/g, ''), 
+            slicedContent 
+        };
     });
     console.log('========= GET /api/scenes', player);
   
-  return Response.json({player, scenes});
+    return Response.json({player, scenes});
+  }).catch((error) => {
+    console.log('========= GET /api/scenes error: ', error);
+  });
 }
 
 export async function POST(req) {
@@ -63,6 +117,13 @@ export async function POST(req) {
         const sceneFilePath = path.join(process.cwd(), "app/data/scenes", `${sceneId}.json`);
         fs.writeFileSync(sceneFilePath, JSON.stringify(sceneToUpdate, null, 2));
 
+
+        // log to google spreadsheet: 
+        await fetch(googleScriptUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ scene: sceneId, player: player.character, message: content }),
+          });
 
         return new Response(JSON.stringify({ success: true }), { status: 200 });
     } catch (error) {

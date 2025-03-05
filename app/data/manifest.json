@@ -1,137 +1,142 @@
 {
-    "scene_00": {
-        "id": "scene_00",
+    "scene_00-excilio": {
+        "id": "scene_00-excilio",
         "chapter": "1: Déia",
-        "title": "Bevezető",
-        "location": "The Rusty Tankard",
+        "title": "Domus Excilio",
+        "location": "A Katedrális",
         "startDate": "2024-10-14",
         "endDate": "2024-10-24",
         "players": [
             "hhanuman@gmail.com",
-            "robert@hrobert.hu",
-            "domokos.zoltan.domokos@gmail.com",
-            "falusi.andras@gmail.com",
-            "imreta@gmail.com",
-            "imrezo@gmail.com"
+            "pothattila@gmail.com",
+            "domokos.zoltan.domokos@gmail.com"
         ]
     }, 
-    "scene_01": {
-        "id": "scene_01",
+    "scene_00-oculus": {
+        "id": "scene_00-oculus",
         "chapter": "1: Déia",
-        "title": "Első fejezet",
-        "location": "The Rusty Tankard",
+        "title": "Praetor Oculus",
+        "location": "A Katedrális",
         "startDate": "2024-10-14",
         "endDate": "2024-10-24",
         "players": [
             "hhanuman@gmail.com",
-            "robert@hrobert.hu",
-            "domokos.zoltan.domokos@gmail.com",
-            "falusi.andras@gmail.com",
-            "imreta@gmail.com",
-            "imrezo@gmail.com"
+            "pothattila@gmail.com",
+            "robert@hrobert.hu"
         ]
-    },
-    "scene_02": {
-        "id": "scene_02",
+    }, 
+    "scene_00-gladius": {
+        "id": "scene_00-gladius",
         "chapter": "1: Déia",
-        "title": "Második fejezet - ifjú corpus tagoknak",
-        "location": "The Gates",
-        "startDate": "2024-11-14",
-        "endDate": "2024-11-24",
-        "players": [
-        "hhanuman@gmail.com",
-        "falusi.andras@gmail.com",
-        "imreta@gmail.com",
-        "imrezo@gmail.com"
-        ]
-    },
-    "scene_02b": {
-        "id": "scene_02",
-        "chapter": "1: Déia",
-        "title": "Második fejezet - rangidősöknek",
-        "location": "The Gates",
-        "startDate": "2024-11-14",
-        "endDate": "2024-11-24",
-        "players": [
-        "hhanuman@gmail.com",
-        "robert@hrobert.hu",
-        "domokos.zoltan.domokos@gmail.com"
-        ]
-    },
-    "scene_03": {
-        "id": "scene_03",
-        "chapter": "1: Déia",
-        "title": "Harmadik fejezet - ez egy aktív fejezet!",
-        "location": "Cathedral",
-        "startDate": "2025-01-01",
-        "endDate": "2025-03-05",
+        "title": "Octavus Gladius",
+        "location": "A Katedrális",
+        "startDate": "2024-10-14",
+        "endDate": "2024-10-24",
         "players": [
             "hhanuman@gmail.com",
-            "robert@hrobert.hu",
-            "domokos.zoltan.domokos@gmail.com",
-            "falusi.andras@gmail.com",
-            "imreta@gmail.com",
-            "imrezo@gmail.com"
-        ]
-    },
-    "scene_03b": {
-        "id": "scene_03b",
-        "chapter": "1: Déia",
-        "title": "Harmadik fejezet - Gladius",
-        "location": "Cathedral",
-        "startDate": "2025-01-01",
-        "endDate": "2025-02-15",
-        "players": [
-            "hhanuman@gmail.com",
+            "pothattila@gmail.com",
             "falusi.andras@gmail.com"
         ]
     },
-    "scene_03c": {
-        "id": "scene_03c",
+    "scene_00-valoris": {
+        "id": "scene_00-valoris",
         "chapter": "1: Déia",
-        "title": "Harmadik fejezet - Valoris",
-        "location": "Cathedral",
-        "startDate": "2025-01-01",
-        "endDate": "2025-02-15",
+        "title": "Decimus Valoris",
+        "location": "A Katedrális",
+        "startDate": "2024-11-14",
+        "endDate": "2024-11-24",
         "players": [
             "hhanuman@gmail.com",
+            "pothattila@gmail.com",
             "imrezo@gmail.com"
         ]
     },
-    "scene_03d": {
-        "id": "scene_03d",
+    "scene_00-vortis": {
+        "id": "scene_00-vortis",
         "chapter": "1: Déia",
-        "title": "Harmadik fejezet - Vortis",
-        "location": "Cathedral",
-        "startDate": "2025-01-01",
-        "endDate": "2025-02-15",
+        "title": "Decimus Vortis",
+        "location": "The Gates",
+        "startDate": "2024-11-14",
+        "endDate": "2024-11-24",
         "players": [
             "hhanuman@gmail.com",
+            "pothattila@gmail.com",
             "imreta@gmail.com"
         ]
     },
-    "scene_02e": {
-        "id": "scene_03e",
+    "scene_1.1": {
+        "id": "scene_1.1",
         "chapter": "1: Déia",
-        "title": "Harmadik fejezet - Excilio",
-        "location": "Cathedral",
+        "title": "Első fejezet, első rész: Ébresztő, ébresztő!",
+        "location": "A Katedrális",
+        "startDate": "2025-01-01",
+        "endDate": "2025-01-05",
+        "players": [
+            "hhanuman@gmail.com",
+            "pothattila@gmail.com",
+            "robert@hrobert.hu",
+            "domokos.zoltan.domokos@gmail.com",
+            "falusi.andras@gmail.com",
+            "imreta@gmail.com",
+            "imrezo@gmail.com"
+        ]
+    },
+    "scene_1.2": {
+        "id": "scene_1.2",
+        "chapter": "1: Déia",
+        "title": "Első fejezet, második rész: Agóra",
+        "location": "Agóra, Asmodeus Kapu",
         "startDate": "2025-01-01",
         "endDate": "2025-02-15",
         "players": [
             "hhanuman@gmail.com",
+            "pothattila@gmail.com",
+            "robert@hrobert.hu",
+            "falusi.andras@gmail.com",
+            "imreta@gmail.com",
+            "imrezo@gmail.com"
+        ]
+    },
+    "scene_1.2-excilio": {
+        "id": "scene_1.2-excilio",
+        "chapter": "1: Déia",
+        "title": "Első fejezet, második rész: Agóra (Excilio)",
+        "location": "Agóra, Asmodeus Kapu",
+        "startDate": "2025-01-01",
+        "endDate": "2025-02-15",
+        "players": [
+            "hhanuman@gmail.com",
+            "pothattila@gmail.com",
             "domokos.zoltan.domokos@gmail.com"
         ]
     },
-    "scene_03f": {
-        "id": "scene_03f",
+    "scene_1.3": {
+        "id": "scene_1.3",
         "chapter": "1: Déia",
-        "title": "Harmadik fejezet - Praetor Oculus",
-        "location": "Cathedral",
+        "title": "Első fejezet, harmadik rész: 'Inkvizítorok!'",
+        "location": "Agóra, Asmodeus Kapu",
         "startDate": "2025-01-01",
         "endDate": "2025-02-15",
         "players": [
             "hhanuman@gmail.com",
-            "robert@hrobert.hu"
+            "pothattila@gmail.com",
+            "robert@hrobert.hu",
+            "falusi.andras@gmail.com",
+            "imreta@gmail.com",
+            "imrezo@gmail.com"
+        ]
+    },
+    "scene_1.3-excilio": {
+        "id": "scene_1.3-excilio",
+        "chapter": "1: Déia",
+        "title": "Első fejezet, harmadik rész: 'Inkvizítorok!' (Excilio)",
+        "location": "Agóra, Asmodeus Kapu",
+        "startDate": "2025-01-01",
+        "endDate": "2025-02-15",
+        "players": [
+            "hhanuman@gmail.com",
+            "pothattila@gmail.com",
+            "domokos.zoltan.domokos@gmail.com"
         ]
     }
 }

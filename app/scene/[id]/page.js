@@ -8,6 +8,22 @@ import moment from 'moment';
 
 export default function RequestedFromApi({ params }) {
     const { data: session } = useSession();
+    /*
+        data: {
+            player: {},
+            scenes: [{
+                id: 1,
+                title: '...',
+                startDate: '...',
+                endDate: '...',
+                content: '...',
+                messages: [{
+                    character: '...',
+                    content: '...'
+                }]
+            }]
+        }
+    */
     const { data, setData } = useData();
     const [message, setMessage] = useState("");
 
@@ -54,7 +70,6 @@ export default function RequestedFromApi({ params }) {
     console.log('============');
     console.log('/fromapi/[id]/page.js', params)
     console.log('============');
-    
     return (
         <>
             {!session && <Link href={`/`}>Menj a kezdőoldalra és lépj be</Link>}
@@ -66,7 +81,7 @@ export default function RequestedFromApi({ params }) {
             ))*/}
             {scene && <div dangerouslySetInnerHTML={{ __html: scene.content }} /> }
             {
-                scene && moment(scene.endDate).isAfter(moment()) && !!remainingMessages && (
+                scene && moment(scene.endDate).isAfter(moment()) && (
                     <>
                         <hr/>
                         {typeof remainingMessages === 'number' && <h6>Még {remainingMessages} üzenetet küldhetsz</h6>}
