@@ -62,31 +62,8 @@ export async function POST(req) {
         // get player character name
         const players = JSON.parse(fs.readFileSync(path.join(process.cwd(), "app/data/players.json"), "utf-8"));
         const player = players.find(p => p.email === session.user.email);
-        // get scene file which is updated, push a message
-        const sceneFiles = fs.readdirSync(path.join(process.cwd(), "app/data/scenes"));
-        const sceneToUpdate = sceneFiles
-            .map(file => {
-                const scene = JSON.parse(fs.readFileSync(path.join(process.cwd(), "app/data/scenes", file), "utf-8"));
-                return scene;
-            })
-            .find(scene => scene.id === sceneId);
         
-        const messagesByUser = sceneToUpdate.messages.filter(message => message.character === player.character);
-
-        console.log('========= POST /api/scenes', player, sceneToUpdate);
-
-        if(messagesByUser.length > 3) {
-            return new Response(JSON.stringify({ error: "Too many messages" }), { status: 500 });
-        }
-        sceneToUpdate.messages.push({ 
-            character: player.character,
-            updated: new Date().toISOString(), 
-            content 
-        });
-
-        // save file
-        const sceneFilePath = path.join(process.cwd(), "app/data/scenes", `${sceneId}.json`);
-        fs.writeFileSync(sceneFilePath, JSON.stringify(sceneToUpdate, null, 2));
+        console.log('========= POST /api/scenes', player);
 
 
         // log to google spreadsheet: 
