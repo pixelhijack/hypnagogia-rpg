@@ -21,8 +21,8 @@ export async function GET(req) {
   return getGithubFiles().then((files) => {
     const players = JSON.parse(fs.readFileSync(path.join(process.cwd(), "app/data/players.json"), "utf-8"));
     // view as: 
-    const player = players.find(p => p.email === "imreta@gmail.com");
-    //const player = players.find(p => p.email === session.user.email);
+    //const player = players.find(p => p.email === "imreta@gmail.com");
+    const player = players.find(p => p.email === session.user.email);
     console.log('========= remoteGithubFiles', player, files.length);
 
     const sceneMetas = Object.values(manifest).filter(scene => scene.players.includes(player.email));
