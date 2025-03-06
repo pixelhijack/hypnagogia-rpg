@@ -72,7 +72,7 @@ function Landing() {
   console.log('CLIENT: data provider, landing page', scenes);
   return (
     <>
-      <h1>Hypnagogia RPG - teszt verzió</h1>
+      <h1>Hypnagogia RPG</h1>
       {
         session && (
           <h2>Isten hozott, Inkvizítor {player && player.character}!</h2>

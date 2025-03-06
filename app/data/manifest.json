@@ -67,7 +67,7 @@
     "scene_1.1": {
         "id": "scene_1.1",
         "chapter": "1: Déia",
-        "title": "Első fejezet, első rész: Ébresztő, ébresztő!",
+        "title": "I. fejezet, I. rész: Ébresztő, ébresztő!",
         "location": "A Katedrális",
         "startDate": "2025-01-01",
         "endDate": "2025-01-05",
@@ -84,7 +84,7 @@
     "scene_1.2": {
         "id": "scene_1.2",
         "chapter": "1: Déia",
-        "title": "Első fejezet, második rész: Agóra",
+        "title": "I. fejezet, II. rész: Agóra",
         "location": "Agóra, Asmodeus Kapu",
         "startDate": "2025-01-01",
         "endDate": "2025-02-15",
@@ -100,7 +100,7 @@
     "scene_1.2-excilio": {
         "id": "scene_1.2-excilio",
         "chapter": "1: Déia",
-        "title": "Első fejezet, második rész: Agóra (Excilio)",
+        "title": "I. fejezet, II. rész: Agóra (Excilio)",
         "location": "Agóra, Asmodeus Kapu",
         "startDate": "2025-01-01",
         "endDate": "2025-02-15",
@@ -113,7 +113,7 @@
     "scene_1.3": {
         "id": "scene_1.3",
         "chapter": "1: Déia",
-        "title": "Első fejezet, harmadik rész: 'Inkvizítorok!'",
+        "title": "I. fejezet, III. rész: 'Inkvizítorok!'",
         "location": "Agóra, Asmodeus Kapu",
         "startDate": "2025-01-01",
         "endDate": "2025-02-15",
@@ -129,7 +129,7 @@
     "scene_1.3-excilio": {
         "id": "scene_1.3-excilio",
         "chapter": "1: Déia",
-        "title": "Első fejezet, harmadik rész: 'Inkvizítorok!' (Excilio)",
+        "title": "I. fejezet, III. rész: 'Inkvizítorok!' (Excilio)",
         "location": "Agóra, Asmodeus Kapu",
         "startDate": "2025-01-01",
         "endDate": "2025-02-15",
@@ -137,6 +137,64 @@
             "hhanuman@gmail.com",
             "pothattila@gmail.com",
             "domokos.zoltan.domokos@gmail.com"
+        ]
+    },
+    "scene_1.4": {
+        "id": "scene_1.4",
+        "chapter": "1: Déia",
+        "title": "I. fejezet, IV. rész: Praetor Oculus szobájában",
+        "location": "A Katedrális",
+        "startDate": "2025-01-01",
+        "endDate": "2025-02-15",
+        "players": [
+            "hhanuman@gmail.com",
+            "pothattila@gmail.com",
+            "robert@hrobert.hu",
+            "falusi.andras@gmail.com",
+            "imreta@gmail.com",
+            "imrezo@gmail.com",
+            "domokos.zoltan.domokos@gmail.com"
+        ]
+    },
+    "scene_1.5-corpus": {
+        "id": "scene_1.5-corpus",
+        "chapter": "1: Déia",
+        "title": "I. fejezet, V. rész: Corpus, kvártélyotokban",
+        "location": "A Katedrális",
+        "startDate": "2025-01-01",
+        "endDate": "2025-03-16",
+        "players": [
+            "hhanuman@gmail.com",
+            "pothattila@gmail.com",
+            "falusi.andras@gmail.com",
+            "imreta@gmail.com",
+            "imrezo@gmail.com"
+        ]
+    },
+    "scene_1.5-excilio": {
+        "id": "scene_1.5-excilio",
+        "chapter": "1: Déia",
+        "title": "I. fejezet, V. rész: Gyóntatófülkék",
+        "location": "A Katedrális",
+        "startDate": "2025-03-16",
+        "endDate": "2025-03-16",
+        "players": [
+            "hhanuman@gmail.com",
+            "pothattila@gmail.com",
+            "domokos.zoltan.domokos@gmail.com"
+        ]
+    },
+    "scene_1.5-oculus": {
+        "id": "scene_1.5-oculus",
+        "chapter": "1: Déia",
+        "title": "I. fejezet, V. rész: Praetor Oculus a sixtus szobájában",
+        "location": "A Katedrális",
+        "startDate": "2025-01-01",
+        "endDate": "2025-03-16",
+        "players": [
+            "hhanuman@gmail.com",
+            "pothattila@gmail.com",
+            "robert@hrobert.hu"
         ]
     }
 }

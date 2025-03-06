@@ -19,11 +19,13 @@ export async function GET(req) {
   //const remoteGithubFiles = await getGithubFiles();
 
   return getGithubFiles().then((files) => {
-    console.log('========= remoteGithubFiles', files.length);
     const players = JSON.parse(fs.readFileSync(path.join(process.cwd(), "app/data/players.json"), "utf-8"));
-    const player = players.find(p => p.email === session.user.email);
+    // view as: 
+    const player = players.find(p => p.email === "imreta@gmail.com");
+    //const player = players.find(p => p.email === session.user.email);
+    console.log('========= remoteGithubFiles', player, files.length);
 
-    const sceneMetas = Object.values(manifest).filter(scene => scene.players.includes(session.user.email));
+    const sceneMetas = Object.values(manifest).filter(scene => scene.players.includes(player.email));
 
     const scenes = sceneMetas.map(scene => {
         const markdown = files.find(file => file.name === `${scene.id}.md`)?.content || '';
@@ -31,7 +33,7 @@ export async function GET(req) {
         // [ { names: ['@dm'], content: '...' }, { names: ['@player1'], content: '...' } ]
         const slicedByNames = sliceMarkdownByAtNames(parsed);
         const authorizedContent = player.shortName === 'dm' ? slicedByNames : slicedByNames.filter(group => group.names.includes(player.shortName));
-        console.log('============= slicedByNames', player.shortName, authorizedContent);
+        console.log('============= slicedByNames', player.shortName, authorizedContent.length);
         return { 
             id: scene.id, 
             title: scene.title, 

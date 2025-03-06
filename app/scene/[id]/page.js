@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useSession } from 'next-auth/react'
 import { useData } from "../../context/DataContext";
 import Link from 'next/link';
-import MarkdownRenderer from 'react-markdown-renderer';
 import moment from 'moment';
 
 export default function RequestedFromApi({ params }) {
@@ -73,20 +72,26 @@ export default function RequestedFromApi({ params }) {
     return (
         <>
             {!session && <Link href={`/`}>Menj a kezdőoldalra és lépj be</Link>}
-            {scenes && <h2>Fejezet: {scene.title}</h2>}
             {/*scene && scene.messages.map((message, i) => (
                 <div key={i}>
-                    <span>{message.character ? `${message.character}: ` : ''}</span><MarkdownRenderer markdown={message.content} />
+                    <span>
+                    {message.character ? `${message.character}: ` : ''}</span><MarkdownRenderer markdown={message.content} />
                 </div>
             ))*/}
             {scene && <div dangerouslySetInnerHTML={{ __html: scene.content }} /> }
             {
                 scene && moment(scene.endDate).isAfter(moment()) && (
                     <>
-                        <hr/>
+                        <br/><hr/><br/>
+                        <i>Hátralévő idő a fejezet zárásáig: még {daysRemaining} nap {hoursRemaining} óra...</i>
+                        <br/>
                         {typeof remainingMessages === 'number' && <h6>Még {remainingMessages} üzenetet küldhetsz</h6>}
-                        <input placeholder={`A karaktered ezt teszi / mondja...`} value={message} onChange={e => setMessage(e.target.value)} />
-                        <button onClick={() => sendMessage(scene.id)}>Hozzászólás</button>
+                        <textarea rows="5" placeholder={`A karaktered ezt teszi / mondja / üzenet a KM-nek...`} value={message} onChange={e => setMessage(e.target.value)} />
+                        <br/>
+                        <button onClick={() => sendMessage(scene.id)}>Beküldés (moderálásra)</button>
+                        <br/>
+                        <a target="_blank" href={`mailto:pothattila@gmail.com?subject=${scene.title}`}>Vagy jöhet emailben is, az a biztos!</a>
+                        
                     </>
                 )
             }
