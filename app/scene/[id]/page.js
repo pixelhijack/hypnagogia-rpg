@@ -25,6 +25,7 @@ export default function RequestedFromApi({ params }) {
     */
     const { data, setData } = useData();
     const [message, setMessage] = useState("");
+    const [feedback, setFeedback] = useState("");
 
     const getScenes = () => {
         fetch("/api/scenes")
@@ -51,9 +52,15 @@ export default function RequestedFromApi({ params }) {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ sceneId, content: message })
+        })
+        .then(json => {
+            setFeedback('Postagalambod elreppent, a mesélő publikálja rövidesen!');
+        })
+        .catch(error => {
+            console.log('ERROR: POST /api/scenes', error);
+            setFeedback('Postagalambod eltéved, próbáld újra később!');
         });
         setMessage("");
-        getScenes();
       };
 
     if (!data) return <p>Loading...</p>;
@@ -85,9 +92,10 @@ export default function RequestedFromApi({ params }) {
                         <br/><hr/><br/>
                         <i>Hátralévő idő a fejezet zárásáig: még {daysRemaining} nap {hoursRemaining} óra...</i>
                         <br/>
-                        {typeof remainingMessages === 'number' && <h6>Még {remainingMessages} üzenetet küldhetsz</h6>}
-                        <textarea rows="5" placeholder={`A karaktered ezt teszi / mondja / üzenet a KM-nek...`} value={message} onChange={e => setMessage(e.target.value)} />
+                        {/*typeof remainingMessages === 'number' && <h6>Még {remainingMessages} üzenetet küldhetsz</h6>*/}
+                        <textarea rows="5" placeholder={`Ezt teszed / mondod / üzenj a mesélőnek...`} value={message} onChange={e => setMessage(e.target.value)} />
                         <br/>
+                        {feedback && (<small onClick={() => setFeedback("")}>{`${feedback}    x`}<br/><br/></small>)}
                         <button onClick={() => sendMessage(scene.id)}>Beküldés (moderálásra)</button>
                         <br/>
                         <a target="_blank" href={`mailto:pothattila@gmail.com?subject=${scene.title}`}>Vagy jöhet emailben is, az a biztos!</a>

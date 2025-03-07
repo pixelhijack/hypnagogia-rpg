@@ -40,7 +40,7 @@ function Landing() {
   if(!session) {
     return (
       <>
-        <h1>Hypnagogia RPG</h1>
+        <h1>Kalandjáték - csak beavatottaknak</h1>
         <p>Meghívott vagy? Próbálj belépni, és kiderül!</p>
         {
           (authProviders && Object.values(authProviders).map((provider) => (
@@ -53,13 +53,12 @@ function Landing() {
   if (!data) {
     return (
       <>
-        <h1>Hypnagogia RPG</h1>
-        <p>Loading...</p>
+        <h1>Loading...</h1>
       </>
     )
   };
 
-  const { player, scenes } = data;
+  const { player, scenes, game } = data;
 
   function handleGoogleSignIn(_provider) {
     const response = signIn(_provider.id);
@@ -69,33 +68,29 @@ function Landing() {
     signOut();
   }
 
-  console.log('CLIENT: data provider, landing page', scenes);
   return (
     <>
-      <h1>Hypnagogia RPG</h1>
+      <h1>{game.title}</h1>
       {
         session && (
-          <h2>Isten hozott, Inkvizítor {player && player.character}!</h2>
+          <h2>{game.subtitle}{player && player.character}</h2>
         )
-      }
-      {
-        !session && (<p>Meghívott vagy? Próbálj belépni, és kiderül!</p>)
       }
       {
         session && (
           <>
             <hr style={{ width: "30%"}}/>
             <h3>Fejezetek</h3>
+            {
+              !scenes && (<p>Loading...</p>)
+            }
+            {
+              scenes && scenes.map((scene, i) => (
+                <Link key={i} href={`scene/${scene.id}`}>{scene.title}</Link>
+              ))
+            }
           </>
         )
-      }
-      {
-        session && scenes && scenes.map((scene, i) => (
-          <Link key={i} href={`scene/${scene.id}`}>{scene.title}</Link>
-        ))
-      }
-      {
-        session && !scenes && (<p>Loading...</p>)
       }
       {
         session?.user && (

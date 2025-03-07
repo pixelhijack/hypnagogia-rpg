@@ -1,0 +1,244 @@
+{
+    "game": {
+        "title": "Hypnagogia RPG", 
+        "subtitle": "Isten hozott, Inkvizítor ",
+        "about": "Déia, a város, ahol a nap sosem kel fel. Ahol a hajnal sosem jön el. Ahol a világosság sosem érkezik."
+    },
+    "players": [
+        {
+            "email": "pothattila@gmail.com",
+            "character": "KM",
+            "shortName": "dm"
+        },
+        {
+            "email": "hhanuman@gmail.com",
+            "character": "DM",
+            "shortName": "dm"
+        },
+        {
+            "email": "domokos.zoltan.domokos@gmail.com",
+            "character": "Domus Excilio",
+            "shortName": "excilio"
+        },
+        {
+            "email": "robert@hrobert.hu",
+            "character": "Praetor Oculus",
+            "shortName": "oculus"
+        },
+        {
+            "email": "falusi.andras@gmail.com",
+            "character": "Octavus Gladius",
+            "shortName": "gladius"
+        },
+        {
+            "email": "imreta@gmail.com",
+            "character": "Decimus Vortis",
+            "shortName": "vortis"
+        },
+        {
+            "email": "imrezo@gmail.com",
+            "character": "Decimus Valoris",
+            "shortName": "valoris"
+        }
+    ],
+    "scenes": {
+        "scene_00-excilio": {
+            "id": "scene_00-excilio",
+            "chapter": "1: Déia",
+            "title": "Domus Excilio",
+            "location": "A Katedrális",
+            "startDate": "2024-10-14",
+            "endDate": "2024-10-24",
+            "players": [
+                "hhanuman@gmail.com",
+                "pothattila@gmail.com",
+                "domokos.zoltan.domokos@gmail.com"
+            ]
+        }, 
+        "scene_00-oculus": {
+            "id": "scene_00-oculus",
+            "chapter": "1: Déia",
+            "title": "Praetor Oculus",
+            "location": "A Katedrális",
+            "startDate": "2024-10-14",
+            "endDate": "2024-10-24",
+            "players": [
+                "hhanuman@gmail.com",
+                "pothattila@gmail.com",
+                "robert@hrobert.hu"
+            ]
+        }, 
+        "scene_00-gladius": {
+            "id": "scene_00-gladius",
+            "chapter": "1: Déia",
+            "title": "Octavus Gladius",
+            "location": "A Katedrális",
+            "startDate": "2024-10-14",
+            "endDate": "2024-10-24",
+            "players": [
+                "hhanuman@gmail.com",
+                "pothattila@gmail.com",
+                "falusi.andras@gmail.com"
+            ]
+        },
+        "scene_00-valoris": {
+            "id": "scene_00-valoris",
+            "chapter": "1: Déia",
+            "title": "Decimus Valoris",
+            "location": "A Katedrális",
+            "startDate": "2024-11-14",
+            "endDate": "2024-11-24",
+            "players": [
+                "hhanuman@gmail.com",
+                "pothattila@gmail.com",
+                "imrezo@gmail.com"
+            ]
+        },
+        "scene_00-vortis": {
+            "id": "scene_00-vortis",
+            "chapter": "1: Déia",
+            "title": "Decimus Vortis",
+            "location": "The Gates",
+            "startDate": "2024-11-14",
+            "endDate": "2024-11-24",
+            "players": [
+                "hhanuman@gmail.com",
+                "pothattila@gmail.com",
+                "imreta@gmail.com"
+            ]
+        },
+        "scene_1.1": {
+            "id": "scene_1.1",
+            "chapter": "1: Déia",
+            "title": "I. fejezet, I. rész: Ébresztő, ébresztő!",
+            "location": "A Katedrális",
+            "startDate": "2025-01-01",
+            "endDate": "2025-01-05",
+            "players": [
+                "hhanuman@gmail.com",
+                "pothattila@gmail.com",
+                "robert@hrobert.hu",
+                "domokos.zoltan.domokos@gmail.com",
+                "falusi.andras@gmail.com",
+                "imreta@gmail.com",
+                "imrezo@gmail.com"
+            ]
+        },
+        "scene_1.2": {
+            "id": "scene_1.2",
+            "chapter": "1: Déia",
+            "title": "I. fejezet, II. rész: Agóra",
+            "location": "Agóra, Asmodeus Kapu",
+            "startDate": "2025-01-01",
+            "endDate": "2025-02-15",
+            "players": [
+                "hhanuman@gmail.com",
+                "pothattila@gmail.com",
+                "robert@hrobert.hu",
+                "falusi.andras@gmail.com",
+                "imreta@gmail.com",
+                "imrezo@gmail.com"
+            ]
+        },
+        "scene_1.2-excilio": {
+            "id": "scene_1.2-excilio",
+            "chapter": "1: Déia",
+            "title": "I. fejezet, II. rész: Agóra (Excilio)",
+            "location": "Agóra, Asmodeus Kapu",
+            "startDate": "2025-01-01",
+            "endDate": "2025-02-15",
+            "players": [
+                "hhanuman@gmail.com",
+                "pothattila@gmail.com",
+                "domokos.zoltan.domokos@gmail.com"
+            ]
+        },
+        "scene_1.3": {
+            "id": "scene_1.3",
+            "chapter": "1: Déia",
+            "title": "I. fejezet, III. rész: 'Inkvizítorok!'",
+            "location": "Agóra, Asmodeus Kapu",
+            "startDate": "2025-01-01",
+            "endDate": "2025-02-15",
+            "players": [
+                "hhanuman@gmail.com",
+                "pothattila@gmail.com",
+                "robert@hrobert.hu",
+                "falusi.andras@gmail.com",
+                "imreta@gmail.com",
+                "imrezo@gmail.com"
+            ]
+        },
+        "scene_1.3-excilio": {
+            "id": "scene_1.3-excilio",
+            "chapter": "1: Déia",
+            "title": "I. fejezet, III. rész: 'Inkvizítorok!' (Excilio)",
+            "location": "Agóra, Asmodeus Kapu",
+            "startDate": "2025-01-01",
+            "endDate": "2025-02-15",
+            "players": [
+                "hhanuman@gmail.com",
+                "pothattila@gmail.com",
+                "domokos.zoltan.domokos@gmail.com"
+            ]
+        },
+        "scene_1.4": {
+            "id": "scene_1.4",
+            "chapter": "1: Déia",
+            "title": "I. fejezet, IV. rész: Praetor Oculus szobájában",
+            "location": "A Katedrális",
+            "startDate": "2025-01-01",
+            "endDate": "2025-02-15",
+            "players": [
+                "hhanuman@gmail.com",
+                "pothattila@gmail.com",
+                "robert@hrobert.hu",
+                "falusi.andras@gmail.com",
+                "imreta@gmail.com",
+                "imrezo@gmail.com",
+                "domokos.zoltan.domokos@gmail.com"
+            ]
+        },
+        "scene_1.5-corpus": {
+            "id": "scene_1.5-corpus",
+            "chapter": "1: Déia",
+            "title": "I. fejezet, V. rész: Corpus, kvártélyotokban",
+            "location": "A Katedrális",
+            "startDate": "2025-01-01",
+            "endDate": "2025-03-16",
+            "players": [
+                "hhanuman@gmail.com",
+                "pothattila@gmail.com",
+                "falusi.andras@gmail.com",
+                "imreta@gmail.com",
+                "imrezo@gmail.com"
+            ]
+        },
+        "scene_1.5-excilio": {
+            "id": "scene_1.5-excilio",
+            "chapter": "1: Déia",
+            "title": "I. fejezet, V. rész: Gyóntatófülkék",
+            "location": "A Katedrális",
+            "startDate": "2025-03-16",
+            "endDate": "2025-03-16",
+            "players": [
+                "hhanuman@gmail.com",
+                "pothattila@gmail.com",
+                "domokos.zoltan.domokos@gmail.com"
+            ]
+        },
+        "scene_1.5-oculus": {
+            "id": "scene_1.5-oculus",
+            "chapter": "1: Déia",
+            "title": "I. fejezet, V. rész: Praetor Oculus a sixtus szobájában",
+            "location": "A Katedrális",
+            "startDate": "2025-01-01",
+            "endDate": "2025-03-16",
+            "players": [
+                "hhanuman@gmail.com",
+                "pothattila@gmail.com",
+                "robert@hrobert.hu"
+            ]
+        }
+    }
+}
