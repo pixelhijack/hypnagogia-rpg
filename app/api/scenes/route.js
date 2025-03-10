@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { marked } from "marked";
+import { Resend } from 'resend';
 import { getServerSession } from "next-auth"; // Correct import for App Router
 import { authOptions } from "../auth/[...nextauth]/route"; // Adjust based on your setup
 import { getGithubFiles, sliceMarkdownByAtNames } from "./services";
@@ -58,6 +59,8 @@ export async function POST(req) {
     const session = await getServerSession(authOptions);
     if (!session) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
     try {
         const body = await req.json(); // Parse the request body
         const { sceneId, content } = body;
@@ -73,10 +76,24 @@ export async function POST(req) {
 
         // log to google spreadsheet: 
         await fetch(googleScriptUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ scene: sceneId, player: player.character, message: content }),
-          });
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ scene: sceneId, player: player.character, message: content }),
+        });
+
+        // email notification w/ resend
+        const { data, error } = await resend.emails.send({
+          from: `${process.env.WHICH_RPG_GAME} <onboarding@resend.dev>`,
+          to: ['pothattila@gmail.com'],
+          subject: `New message from ${player.character} in scene ${sceneId}`,
+          html: content,
+        });
+
+        if (error) {
+          console.error('========= POST /api/scenes RESEND error', error);
+          return new Response(JSON.stringify({ error: "Internal Server Error: api/scenes/route.js" }), { status: 500 });
+        }
+        if(data) console.log('========= POST /api/scenes RESEND data', data); 
 
         return new Response(JSON.stringify({ success: true }), { status: 200 });
     } catch (error) {
