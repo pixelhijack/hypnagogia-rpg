@@ -17,8 +17,8 @@ export async function GET(req, { params }) {
     // scenes/imreta@gmail.com => api/scenes/["imreta@gmail.com"] => playerEmail = "imreta@gmail.com"
     const { playerEmail } = params; 
 
-    return getGithubFiles().then((files) => {
-        console.log('========= remoteGithubFiles', files.length);
+    return getGithubFiles().then(({sceneFiles, imageFiles}) => {
+        console.log('========= remoteGithubFiles', sceneFiles.length);
         const players = JSON.parse(fs.readFileSync(path.join(process.cwd(), "app/data/players.json"), "utf-8"));
         const player = players.find(p => p.email === playerEmail);
     
@@ -29,7 +29,7 @@ export async function GET(req, { params }) {
         const sceneMetas = Object.values(manifest.scenes).filter(scene => scene.players.includes(player.email));
     
         const scenes = sceneMetas.map(scene => {
-            const markdown = files.find(file => file.name === `${scene.id}.md`)?.content || '';
+            const markdown = sceneFiles.find(file => file.name === `${scene.id}.md`)?.content || '';
             const parsed = marked(markdown);
             // [ { names: ['@dm'], content: '...' }, { names: ['@player1'], content: '...' } ]
             const slicedByNames = sliceMarkdownByAtNames(parsed);
@@ -45,7 +45,7 @@ export async function GET(req, { params }) {
             };
         });
       
-        return Response.json({player, scenes, game: manifest.game});
+        return Response.json({player, scenes, imageFiles, game: manifest.game});
     }).catch((error) => {
         console.log('========= GET /api/help/[playerEmail]/route.js error: ', error);
     });

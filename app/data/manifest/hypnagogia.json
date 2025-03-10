@@ -114,6 +114,7 @@
             "location": "A Katedrális",
             "startDate": "2025-01-01",
             "endDate": "2025-01-05",
+            "image": "https://raw.githubusercontent.com/pixelhijack/rpg-scenes/master/hypnagogia/images/deia.png",
             "players": [
                 "hhanuman@gmail.com",
                 "pothattila@gmail.com",
@@ -131,6 +132,7 @@
             "location": "Agóra, Asmodeus Kapu",
             "startDate": "2025-01-01",
             "endDate": "2025-02-15",
+            "image": "https://raw.githubusercontent.com/pixelhijack/rpg-scenes/master/hypnagogia/images/agora.png",
             "players": [
                 "hhanuman@gmail.com",
                 "pothattila@gmail.com",

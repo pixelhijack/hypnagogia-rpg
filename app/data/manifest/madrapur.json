@@ -1,0 +1,33 @@
+{
+    "game": {
+        "title": "Madrapur", 
+        "subtitle": "Kérjük csatolják be öveiket, turbulencia várható",
+        "about": "Egy történet a felhők felett"
+    },
+    "players": [
+        {
+            "email": "pothattila@gmail.com",
+            "character": "KM",
+            "shortName": "dm"
+        },
+        {
+            "email": "hhanuman@gmail.com",
+            "character": "DM",
+            "shortName": "dm"
+        }
+    ],
+    "scenes": {
+        "scene_01-check-in": {
+            "id": "scene_01-check-in",
+            "chapter": "Check in",
+            "title": "Madrapur: Check-in",
+            "location": "A New Ark reptér",
+            "startDate": "2024-10-14",
+            "endDate": "2024-10-24",
+            "players": [
+                "hhanuman@gmail.com",
+                "pothattila@gmail.com"
+            ]
+        }
+    }
+}

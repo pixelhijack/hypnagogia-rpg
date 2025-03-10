@@ -26,12 +26,13 @@ export async function getGithubFiles() {
             console.log('========= GITHUB ACCESS error: ', error);
         });
 
-        console.log('============= fileListResponse.status', fileListResponse.status);
+        console.log('============= GITHUB request.status', fileListResponse.status);
 
         if (!fileListResponse.ok) throw new Error("Failed to fetch file list");
 
         const files = await fileListResponse.json();
-
+        console.log('============= GITHUB files', files);
+        
         // 2️ Extract markdown file URLs
         const markdownFiles = files.filter(file => file.name.endsWith(".md"));
 
@@ -43,10 +44,36 @@ export async function getGithubFiles() {
         });
 
         const scenes = await Promise.all(scenePromises);
-        return scenes;
+        
+        // 4️ Get list of files in the "images" folder
+        const imageListUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${WHICH_RPG_GAME}/images?ref=${GITHUB_BRANCH}`;
+        
+        const imageListResponse = await fetch(imageListUrl, {
+            headers: GITHUB_ACCESS_TOKEN ? { Authorization: `token ${GITHUB_ACCESS_TOKEN}` } : {},
+        }).catch((error) => {
+            console.log('========= GITHUB ACCESS error: ', error);
+        });
+
+        console.log('============= GITHUB request.status', imageListResponse.status);
+
+        if (!imageListResponse.ok) throw new Error("Failed to fetch image list");
+
+        const images = await imageListResponse.json();
+        console.log('============= GITHUB images', images);
+
+        // 5️ Extract image file URLs
+        const imageFiles = images.filter(file => file.type === "file");
+
+        // 6️ Generate raw URLs for each image file
+        const imageContents = imageFiles.map(file => {
+          const rawUrl = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${file.path}`;
+          return { name: file.name, url: rawUrl, path: file.path };
+        });
+
+        return { sceneFiles: scenes, imageFiles: imageContents };
     } catch(e) {
         console.error("Failed to fetch scene files from GitHub", e);
-        return [];
+        return { scenesFiles: [], imageFiles: [] };
     }
 }
 

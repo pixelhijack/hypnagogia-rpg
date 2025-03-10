@@ -74,7 +74,7 @@ export default function RequestedFromApi({ params }) {
     //const remainingMessages = 3 - messagesByUser.length;
 
     console.log('============');
-    console.log('/fromapi/[id]/page.js', params)
+    console.log('/fromapi/[id]/page.js', params, scenes);
     console.log('============');
     return (
         <>
@@ -85,7 +85,7 @@ export default function RequestedFromApi({ params }) {
                     {message.character ? `${message.character}: ` : ''}</span><MarkdownRenderer markdown={message.content} />
                 </div>
             ))*/}
-            {scene && <div dangerouslySetInnerHTML={{ __html: scene.content }} /> }
+            {scene && <div className="scene" dangerouslySetInnerHTML={{ __html: scene.content }} /> }
             {
                 scene && moment(scene.endDate).isAfter(moment()) && (
                     <>
@@ -103,6 +103,7 @@ export default function RequestedFromApi({ params }) {
                     </>
                 )
             }
+            {scene && scene.image && <img src={scene.image} />}
         </>
     );
 }
