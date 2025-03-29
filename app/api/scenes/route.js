@@ -44,6 +44,7 @@ export async function GET(req) {
             endDate: scene.endDate,
             content: authorizedContent.map(group => group.content).join('').replace(/@\w+/g, ''), 
             slicedByNames,
+            parsed,
             image: scene.image 
         };
     });

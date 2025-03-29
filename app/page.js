@@ -6,7 +6,8 @@ import { useState, useEffect } from "react";
 import React from 'react'
 import Link from 'next/link';
 import { useData } from "./context/DataContext";
-
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "./firebase";
 
 function Landing() {
   const provider = null;
@@ -14,6 +15,21 @@ function Landing() {
   const { data: session } = useSession();
   //const { data: scenes, setData: setScenes } = useData();
   const { data, setData } = useData();
+
+  useEffect(() => {
+    const fetchScenes = async () => {
+      if (!session) return;
+      try {
+        const querySnapshot = await getDocs(collection(db, "games"));
+        const scenesData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        console.log('=== FIREBASE', scenesData);
+      } catch (error) {
+        console.error("Firebase error: ", error);
+      }
+    };
+
+    fetchScenes();
+  }, [session]);
 
   useEffect(() => {
     const setProviders = async () => {
