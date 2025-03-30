@@ -42,6 +42,17 @@ function Chapter() {
   }, [session]);
 
   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        console.log("Firebase session expired, logging out...");
+        signOut(); // Log out the user
+      }
+    });
+  
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
     if (firebaseUser && !games) {
       firebaseUser.getIdToken().then((idToken) => {
         const gameName = "madrapur";
