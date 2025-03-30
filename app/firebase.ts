@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getAuth, setPersistence, browserLocalPersistence  } from "firebase/auth";
 
 // Your Firebase configuration object
 const firebaseConfig = {
@@ -14,7 +14,15 @@ const firebaseConfig = {
 };
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-const db = getFirestore(app);
 const auth = getAuth(app);
+setPersistence(auth, browserLocalPersistence)
+  .then(() => {
+    console.log("Firebase session persistence set to local storage");
+  })
+  .catch((error) => {
+    console.error("Error setting Firebase session persistence:", error);
+  });
+
+  const db = getFirestore(app);
 
 export { db, auth };

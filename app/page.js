@@ -1,14 +1,13 @@
 'use client'
 
 import styles from './page.module.css'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { signIn, signOut, useSession, getSession } from 'next-auth/react'
 import { useState, useEffect } from "react";
 import React from 'react'
 import Link from 'next/link';
 import { useData } from "./context/DataContext";
 import { getAuth, signInWithCredential, onAuthStateChanged, GoogleAuthProvider } from "firebase/auth";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "./firebase";
+import { auth } from "./firebase";
 
 
 function Landing() {
@@ -30,18 +29,29 @@ function Landing() {
   }, []);
   
   useEffect(() => {
-    if (session?.user?.googleIdToken) {
-      const firebaseAuth = getAuth();
-      const credential = GoogleAuthProvider.credential(session.user.googleIdToken);
-      signInWithCredential(firebaseAuth, credential)
-        .then(async (userCredential) => {
-          const firebaseIdToken = await userCredential.user.getIdToken();
-          // Optionally, store the Firebase ID token in the session or state
-        })
-        .catch((error) => {
-          console.error("Error signing in to Firebase:", error);
-        });
-    }
+    const refreshFirebaseSession = async () => {
+      if (session?.user?.googleIdToken) {
+        try {
+          const credential = GoogleAuthProvider.credential(session.user.googleIdToken);
+          await signInWithCredential(auth, credential);
+          console.log("Firebase session refreshed");
+        } catch (error) {
+          console.error("Error refreshing Firebase session:", error);
+
+          // If the Google OAuth ID token is stale, refresh the session
+          if (error.code === "auth/invalid-credential") {
+            const refreshedSession = await getSession(); // Refresh the session
+            if (refreshedSession?.user?.googleIdToken) {
+              const newCredential = GoogleAuthProvider.credential(refreshedSession.user.googleIdToken);
+              await signInWithCredential(auth, newCredential);
+              console.log("Firebase session refreshed with new Google ID token");
+            }
+          }
+        }
+      }
+    };
+
+    refreshFirebaseSession();
   }, [session]);
 
   useEffect(() => {
