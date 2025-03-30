@@ -1,72 +1,79 @@
 'use client'
 
 import styles from './page.module.css'
-import { signIn, signOut, getProviders, useSession } from 'next-auth/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
 import { useState, useEffect } from "react";
 import React from 'react'
 import Link from 'next/link';
 import { useData } from "./context/DataContext";
+import { getAuth, signInWithCredential, onAuthStateChanged, GoogleAuthProvider } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 
+
 function Landing() {
-  const provider = null;
-  const [authProviders, setAuthProviders] = useState(provider);
   const { data: session } = useSession();
-  //const { data: scenes, setData: setScenes } = useData();
-  const { data, setData } = useData();
+  const { data: games, setData } = useData();
+  const [firebaseUser, setFirebaseUser] = useState(null); 
 
   useEffect(() => {
-    const fetchScenes = async () => {
-      if (!session) return;
-      try {
-        const querySnapshot = await getDocs(collection(db, "games"));
-        const scenesData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        console.log('=== FIREBASE', scenesData);
-      } catch (error) {
-        console.error("Firebase error: ", error);
+    const firebaseAuth = getAuth();
+    const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
+      if (user) {
+        setFirebaseUser(user); // Firebase user is authenticated
+      } else {
+        setFirebaseUser(null); // Firebase user is not authenticated
       }
-    };
+    });
 
-    fetchScenes();
+    return () => unsubscribe(); // Cleanup the listener on unmount
+  }, []);
+  
+  useEffect(() => {
+    if (session?.user?.googleIdToken) {
+      const firebaseAuth = getAuth();
+      const credential = GoogleAuthProvider.credential(session.user.googleIdToken);
+      signInWithCredential(firebaseAuth, credential)
+        .then(async (userCredential) => {
+          const firebaseIdToken = await userCredential.user.getIdToken();
+          // Optionally, store the Firebase ID token in the session or state
+        })
+        .catch((error) => {
+          console.error("Error signing in to Firebase:", error);
+        });
+    }
   }, [session]);
 
   useEffect(() => {
-    const setProviders = async () => {
-      const response = await getProviders();
-      setAuthProviders(response);
-    }
-    setProviders();
-  }, [])
-
-  useEffect(() => {
-    if (session && !data) {
-      fetch("/api/scenes")
-        .then(response => response.json())
-        .then(json => {
-          console.log('CLIENT: /api/scenes response', json);
-          setData(json);
+    if (firebaseUser && !games) {
+      firebaseUser.getIdToken().then((idToken) => {
+        fetch("/api/games", {
+          headers: {
+            Authorization: `Bearer ${idToken}`, // Pass Firebase ID token in Authorization header
+          },
         })
-        .catch(error => {
-          console.log('ERROR: /api/scenes', error);
-        });
+          .then((response) => response.json())
+          .then((json) => {
+            console.log("CLIENT: /api/games response", json);
+            setData(json);
+          })
+          .catch((error) => {
+            console.log("ERROR: /api/games", error);
+          });
+      });
     }
-  }, [session, data, setData]);
+  }, [firebaseUser, games]);
 
   if(!session) {
     return (
       <>
         <h1>Kalandjáték - csak beavatottaknak</h1>
         <p>Meghívott vagy? Próbálj belépni, és kiderül!</p>
-        {
-          (authProviders && Object.values(authProviders).map((provider) => (
-            <button className={styles.authButton} onClick={() => handleGoogleSignIn(provider)} type='button' key={provider.name}>Sign In With {provider.name}</button>
-          )))
-        }
+        <button onClick={() => signIn('google')}>Sign In With Google</button>
       </>
     )
   };
-  if (!data) {
+  if (!games) {
     return (
       <>
         <h1>Loading...</h1>
@@ -74,45 +81,15 @@ function Landing() {
     )
   };
 
-  const { player, scenes, game } = data;
-
-  function handleGoogleSignIn(_provider) {
-    const response = signIn(_provider.id);
-  }
-
-  function handleGoogleSignOut() {
-    signOut();
-  }
-
   return (
     <>
-      <h1>{game.title}</h1>
+      <h1>Welcome</h1>
       {
-        session && (
-          <h2>{game.subtitle}{player && player.character}</h2>
-        )
+        session?.user && games && games.map(game => (
+          <Link key={game.id} href={`/${game.id}`}>{game.name}</Link>
+        ))
       }
-      {
-        session && (
-          <>
-            <hr style={{ width: "30%"}}/>
-            <h3>Fejezetek</h3>
-            {
-              !scenes && (<p>Loading...</p>)
-            }
-            {
-              scenes && scenes.map((scene, i) => (
-                <Link key={i} href={`scene/${scene.id}`}>{scene.title}</Link>
-              ))
-            }
-          </>
-        )
-      }
-      {
-        session?.user && (
-          <button className={styles.unauthButton} onClick={() => handleGoogleSignOut()} type='button'>Sign Out From Google</button>
-        )
-      }
+      <button onClick={() => signOut()}>Sign Out</button>
     </>
   )
 }
