@@ -14,11 +14,11 @@ export function getGameMeta() {
     return games[currentGame] || {};
   }
 
-export async function getGithubFiles() {
+export async function getGithubFiles(gameName) {
     try {
         // 1️ Get list of files in the "scenes" folder
         // https://github.com/pixelhijack/rpg-scenes/tree/master/hypnagogia
-        const fileListUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${WHICH_RPG_GAME}?ref=${GITHUB_BRANCH}`;
+        const fileListUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${gameName}?ref=${GITHUB_BRANCH}`;
         
         const fileListResponse = await fetch(fileListUrl, {
             headers: GITHUB_ACCESS_TOKEN ? { Authorization: `token ${GITHUB_ACCESS_TOKEN}` } : {},
