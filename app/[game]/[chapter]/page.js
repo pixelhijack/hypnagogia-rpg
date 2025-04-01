@@ -8,12 +8,12 @@ import { useParams } from 'next/navigation';
 
 
 function Chapter() {
-  const { data: games, setData } = useData();
+  const { data: data, setData } = useData();
   const { game, chapter } = useParams();
   const { user, handleSignIn, handleSignOut } = useAuth();
 
   useEffect(() => {
-    if (user && !games) {
+    if (user && !data) {
       user.getIdToken().then((idToken) => {
         const gameName = "madrapur";
         fetch(`/api/game/${gameName}`, {
@@ -31,7 +31,7 @@ function Chapter() {
           });
       });
     }
-  }, [user, games]);
+  }, [user, data]);
 
   if (!user) {
     return (
@@ -43,7 +43,7 @@ function Chapter() {
     );
   }
 
-  if (!games) {
+  if (!data) {
     return (
       <>
         <h1>Loading...</h1>
@@ -54,7 +54,7 @@ function Chapter() {
   return (
     <>
       <h1>{game} - {chapter}</h1>
-      {user && games && games.map((game, i) => (
+      {user && data && data.chapters.map((game, i) => (
         <Link key={i} href={`/${game.id}`}>{game.name}</Link>
       ))}
       <button onClick={handleSignOut}>Sign Out</button>

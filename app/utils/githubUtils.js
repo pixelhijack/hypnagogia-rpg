@@ -27,13 +27,15 @@ export async function getGithubFiles(gameName = 'madrapur') {
         const markdownFiles = files.filter(file => file.name.endsWith(".md"));
 
         // 3️ Fetch content of each markdown file
-        const scenePromises = markdownFiles.map(async (file) => {
+        const chapterPromises = markdownFiles.map(async (file) => {
             const fileResponse = await fetch(file.download_url);
             const content = await fileResponse.text();
             return { name: file.name, content };
         });
 
-        const scenes = await Promise.all(scenePromises);
+        const chapters = await Promise.all(chapterPromises);
+        const introduction = chapters.find(chapter => chapter.name === 'introduction.md');
+        console.log('============= GITHUB chapters', chapters);
         
         // 4️ Get list of files in the "images" folder
         const imageListUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${gameName}/images?ref=${GITHUB_BRANCH}`;
@@ -49,6 +51,7 @@ export async function getGithubFiles(gameName = 'madrapur') {
         if (!imageListResponse.ok) throw new Error("Failed to fetch image list");
 
         const images = await imageListResponse.json();
+        const cover = images.find(image => image.name.includes('cover'));
         console.log('============= GITHUB images', images);
 
         // 5️ Extract image file URLs
@@ -60,10 +63,18 @@ export async function getGithubFiles(gameName = 'madrapur') {
           return { name: file.name, url: rawUrl, path: file.path };
         });
 
-        return { sceneFiles: scenes, imageFiles: imageContents };
+        return { 
+            cover, 
+            introduction, 
+            chapters, 
+            imageFiles: imageContents 
+        };
     } catch(e) {
         console.error("Failed to fetch scene files from GitHub", e);
-        return { scenesFiles: [], imageFiles: [] };
+        return { 
+            chapters: [], 
+            imageFiles: [] 
+        };
     }
 }
 

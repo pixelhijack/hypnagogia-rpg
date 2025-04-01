@@ -8,11 +8,11 @@ import { useAuth } from './layout';
 
 
 function Landing() {
-  const { data: games, setData } = useData();
+  const { data, setData } = useData();
   const { user, handleSignIn, handleSignOut } = useAuth();
 
   useEffect(() => {
-    if (user && !games) {
+    if (user && !data) {
       user.getIdToken().then((idToken) => {
         fetch("/api/games", {
           headers: {
@@ -29,7 +29,7 @@ function Landing() {
           });
       });
     }
-  }, [user, games]);
+  }, [user, data]);
 
   if(!user) {
     return (
@@ -40,7 +40,7 @@ function Landing() {
       </>
     )
   };
-  if (!games) {
+  if (!data) {
     return (
       <>
         <h1>Loading...</h1>
@@ -52,8 +52,8 @@ function Landing() {
     <>
       <h1>Welcome {user.displayName}</h1>
       {
-        user && games && games.map((game, i) => (
-          <Link key={i} href={`/${game.id}`}>{game.name}</Link>
+        user && data && data.chapters.map((chapter, i) => (
+          <Link key={i} href={`/${chapter.id}`}>{chapter.name}</Link>
         ))
       }
       <button onClick={handleSignOut}>Sign Out</button>

@@ -18,7 +18,7 @@ export async function GET(req) {
 
   //const remoteGithubFiles = await getGithubFiles();
 
-  return getGithubFiles().then(({sceneFiles, imageFiles}) => {
+  return getGithubFiles().then(({chapters, imageFiles}) => {
     // Read the manifest file synchronously
     const manifestPath = path.join(process.cwd(), `app/data/manifest/${process.env.WHICH_RPG_GAME}.json`);
     const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf-8"));
@@ -26,12 +26,12 @@ export async function GET(req) {
     // view as: 
     //const player = players.find(p => p.email === "imreta@gmail.com");
     const player = manifest.players.find(p => p.email === session.user.email);
-    console.log('========= remoteGithubFiles', player, sceneFiles.length);
+    console.log('========= remoteGithubFiles', player, chapters.length);
 
     const sceneMetas = Object.values(manifest.scenes).filter(scene => scene.players.includes(player.email));
 
     const scenes = sceneMetas.map(scene => {
-        const markdown = sceneFiles.find(file => file.name === `${scene.id}.md`)?.content || '';
+        const markdown = chapters.find(file => file.name === `${scene.id}.md`)?.content || '';
         const parsed = marked(markdown);
         // [ { names: ['@dm'], content: '...' }, { names: ['@player1'], content: '...' } ]
         const slicedByNames = sliceMarkdownByAtNames(parsed);

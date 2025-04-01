@@ -16,15 +16,17 @@ export async function GET(req, { params }) {
 
     // Check cache for GitHub files
     const cacheKey = `githubFiles:${gameName}`;
-    let sceneFiles = getCache(cacheKey);
+    let githubData = getCache(cacheKey);
 
-    if (!sceneFiles) {
+    if (!githubData) {
+      console.log("==============================");
+      console.log("=== NO CACHE === refreshing...");
+      console.log("==============================");
       const githubData = await getGithubFiles(gameName);
-      sceneFiles = githubData.sceneFiles;
-      setCache(cacheKey, sceneFiles, 60000); // Cache for 60 seconds
+      setCache(cacheKey, githubData, 60000); // Cache for 60 seconds
     }
 
-    return new Response(JSON.stringify(sceneFiles), { status: 200 });
+    return new Response(JSON.stringify(githubData), { status: 200 });
   } catch (error) {
     console.error("Error in GET /api/game/[gameName]:", error);
     return new Response(JSON.stringify({ error: error.message || "Internal Server Error" }), { status: 500 });

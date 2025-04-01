@@ -17,8 +17,8 @@ export async function GET(req, { params }) {
     // scenes/imreta@gmail.com => api/scenes/["imreta@gmail.com"] => playerEmail = "imreta@gmail.com"
     const { playerEmail } = params; 
 
-    return getGithubFiles().then(({sceneFiles, imageFiles}) => {
-        console.log('========= remoteGithubFiles', sceneFiles.length);
+    return getGithubFiles().then(({chapters, imageFiles}) => {
+        console.log('========= remoteGithubFiles', chapters.length);
         const players = JSON.parse(fs.readFileSync(path.join(process.cwd(), "app/data/players.json"), "utf-8"));
         const player = players.find(p => p.email === playerEmail);
     
@@ -29,7 +29,7 @@ export async function GET(req, { params }) {
         const sceneMetas = Object.values(manifest.scenes).filter(scene => scene.players.includes(player.email));
     
         const scenes = sceneMetas.map(scene => {
-            const markdown = sceneFiles.find(file => file.name === `${scene.id}.md`)?.content || '';
+            const markdown = chapters.find(file => file.name === `${scene.id}.md`)?.content || '';
             const parsed = marked(markdown);
             // [ { names: ['@dm'], content: '...' }, { names: ['@player1'], content: '...' } ]
             const slicedByNames = sliceMarkdownByAtNames(parsed);

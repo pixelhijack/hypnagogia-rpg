@@ -8,12 +8,12 @@ import { useAuth } from '../layout';
 
 
 function Game() {
-  const { data: games, setData } = useData();
+  const { data, setData } = useData();
   const { user, handleSignIn, handleSignOut } = useAuth();
   const { game } = useParams();
 
   useEffect(() => {
-    if (user && !games) {
+    if (user && !data) {
       user.getIdToken().then((idToken) => {
         fetch("/api/games", {
           headers: {
@@ -30,7 +30,7 @@ function Game() {
           });
       });
     }
-  }, [user, games]);
+  }, [user, data]);
 
   if(!user) {
     return (
@@ -41,7 +41,7 @@ function Game() {
       </>
     )
   };
-  if (!games) {
+  if (!data) {
     return (
       <>
         <h1>Loading...</h1>
@@ -53,7 +53,7 @@ function Game() {
     <>
       <h1>{game}</h1>
       {
-        user && games && games.map(game => (
+        user && data && data.chapters.map(game => (
           <Link key={game.id} href={`/${game.id}`}>{game.name}</Link>
         ))
       }
