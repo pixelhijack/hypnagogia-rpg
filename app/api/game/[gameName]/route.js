@@ -1,50 +1,32 @@
-import { adminAuth, adminDb } from "../../../firebaseAdmin";
-import { getGithubFiles, sliceMarkdownByAtNames } from "../../scenes/services";
+import { verifyFirebaseIdToken, getUserFromFirestore, getUserGames } from "../../../utils/authUtils";
+import { getGithubFiles } from "../../../utils/githubUtils";
+import { getCache, setCache } from "../../../utils/cache";
 
 export async function GET(req, { params }) {
-  const { gameName } = params; 
+  const { gameName } = params;
+
   try {
-    const firebaseIdToken = req.headers.get("authorization")?.split("Bearer ")[1];
+    const decodedToken = await verifyFirebaseIdToken(req);
+    const user = await getUserFromFirestore(decodedToken.email);
+    const userGames = await getUserGames(user);
 
-    if (!firebaseIdToken) {
-      return new Response(JSON.stringify({ error: "Missing Firebase ID token" }), { status: 401 });
+    if (!userGames.some((game) => game.name === gameName)) {
+      return new Response(JSON.stringify({ error: "Game not found or access denied" }), { status: 403 });
     }
 
-    // Verify the Firebase ID token using the Firebase Admin SDK
-    const decodedToken = await adminAuth.verifyIdToken(firebaseIdToken);
-    if (!decodedToken) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    // Check cache for GitHub files
+    const cacheKey = `githubFiles:${gameName}`;
+    let sceneFiles = getCache(cacheKey);
+
+    if (!sceneFiles) {
+      const githubData = await getGithubFiles(gameName);
+      sceneFiles = githubData.sceneFiles;
+      setCache(cacheKey, sceneFiles, 60000); // Cache for 60 seconds
     }
 
-    const userEmail = decodedToken.email;
-
-    // Query Firestore for users and games
-    const usersSnapshot = await adminDb.collection("users").get();
-    const gamesSnapshot = await adminDb.collection("games").get();
-
-    const users = usersSnapshot.docs
-      .map((doc) => doc.data())[0];
-
-    const user = Object.values(users).find((user) => user.email === userEmail)  
-      console.log("/API/GAME users, user: ", users, user);
-    if (!user) {
-      return new Response(JSON.stringify({ error: "User not found" }), { status: 404 });
-    }
-
-    const games = gamesSnapshot.docs
-      .map((doc) => ({ id: doc.id, ...doc.data() }));
-    const userGames = games
-      .filter((game) => user.games?.includes(game.id));
-
-    return getGithubFiles(gameName).then(({sceneFiles, imageFiles}) => {
-        console.log("/API/GAME sceneFiles: ", sceneFiles);
-        return new Response(JSON.stringify(sceneFiles), { status: 200 });
-    }).catch((error) => {
-        console.log('========= /api/game get github files error: ', error);
-    });
-
+    return new Response(JSON.stringify(sceneFiles), { status: 200 });
   } catch (error) {
-    console.error("Error fetching games:", error);
-    return new Response(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
+    console.error("Error in GET /api/game/[gameName]:", error);
+    return new Response(JSON.stringify({ error: error.message || "Internal Server Error" }), { status: 500 });
   }
 }

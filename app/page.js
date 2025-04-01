@@ -52,8 +52,8 @@ function Landing() {
     <>
       <h1>Welcome {user.displayName}</h1>
       {
-        user && games && games.map(game => (
-          <Link key={game.id} href={`/${game.id}`}>{game.name}</Link>
+        user && games && games.map((game, i) => (
+          <Link key={i} href={`/${game.id}`}>{game.name}</Link>
         ))
       }
       <button onClick={handleSignOut}>Sign Out</button>
