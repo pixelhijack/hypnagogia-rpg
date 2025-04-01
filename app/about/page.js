@@ -1,15 +1,41 @@
 'use client';
 import { useState, useEffect } from "react";
-import { useSession } from 'next-auth/react'
 import { useData } from "../context/DataContext";
 import Link from 'next/link';
 
 export default function About() {
-    const { data: session } = useSession();
     const { data, setData } = useData();
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser); // Set the authenticated user
+      });
+
+      return () => unsubscribe(); // Cleanup the listener on unmount
+    }, []);
+
+    const handleSignIn = async () => {
+      const provider = new GoogleAuthProvider();
+      try {
+        const result = await signInWithPopup(auth, provider);
+        console.log("User signed in:", result.user);
+      } catch (error) {
+        console.error("Error signing in:", error);
+      }
+    };
+
+    const handleSignOut = async () => {
+      try {
+        await signOut(auth);
+        console.log("User signed out");
+      } catch (error) {
+        console.error("Error signing out:", error);
+      }
+    };
     
     useEffect(() => {
-        if (session && !data) {
+        if (user && !data) {
           fetch("/api/scenes")
             .then(response => response.json())
             .then(json => {

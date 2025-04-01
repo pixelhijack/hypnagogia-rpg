@@ -1,6 +1,4 @@
-import { getServerSession } from "next-auth";
 import { adminAuth, adminDb } from "../../firebaseAdmin";
-import { authOptions } from "../auth/[...nextauth]/route";
 
 export async function GET(req) {
   try {
