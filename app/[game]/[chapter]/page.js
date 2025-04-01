@@ -1,45 +1,16 @@
 'use client';
 
-import { useState, useEffect } from "react";
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
+import { useData } from '../../context/DataContext';
+import { useAuth } from '../../layout';
 import { useParams } from 'next/navigation';
-import { useData } from "../../context/DataContext";
-import { auth } from "../../firebase"; 
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
 
 
 function Chapter() {
   const { data: games, setData } = useData();
   const { game, chapter } = useParams();
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser); // Set the authenticated user
-    });
-
-    return () => unsubscribe(); // Cleanup the listener on unmount
-  }, []);
-
-  const handleSignIn = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      console.log("User signed in:", result.user);
-    } catch (error) {
-      console.error("Error signing in:", error);
-    }
-  };
-
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-      console.log("User signed out");
-    } catch (error) {
-      console.error("Error signing out:", error);
-    }
-  };
+  const { user, handleSignIn, handleSignOut } = useAuth();
 
   useEffect(() => {
     if (user && !games) {
@@ -83,8 +54,8 @@ function Chapter() {
   return (
     <>
       <h1>{game} - {chapter}</h1>
-      {user && games && games.map((game) => (
-        <Link key={game.id} href={`/${game.id}`}>{game.name}</Link>
+      {user && games && games.map((game, i) => (
+        <Link key={i} href={`/${game.id}`}>{game.name}</Link>
       ))}
       <button onClick={handleSignOut}>Sign Out</button>
     </>
