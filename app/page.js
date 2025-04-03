@@ -50,10 +50,19 @@ function Landing() {
 
   return (
     <>
-      <h1>Welcome {user.displayName}</h1>
+      <h1>Welcome, {user.displayName}</h1>
       {
-        user && data && data.chapters.map((chapter, i) => (
-          <Link key={i} href={`/${chapter.id}`}>{chapter.name}</Link>
+        user && data && data?.games?.map((game, i) => (
+          <Link key={i} href={`/${game.id}`} style={{ textDecoration: 'none' }}>
+            <div className={'gameCard'} style={{ backgroundImage: `url(${game.coverImage})` }}>
+            <h2>
+              <span className="highlightedText">{game.name}</span>
+            </h2>
+            <p>
+              <span className="highlightedText">{game.introduction}</span>
+            </p>
+            </div>
+          </Link>
         ))
       }
       <button onClick={handleSignOut}>Sign Out</button>

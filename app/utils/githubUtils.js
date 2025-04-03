@@ -16,12 +16,12 @@ export async function getGithubFiles(gameName = 'madrapur') {
             console.log('========= GITHUB ACCESS error: ', error);
         });
 
-        console.log('============= GITHUB request.status', fileListResponse.status);
+        //console.log('============= GITHUB request.status', fileListResponse.status);
 
         if (!fileListResponse.ok) throw new Error("Failed to fetch file list");
 
         const files = await fileListResponse.json();
-        console.log('============= GITHUB files', files);
+        //console.log('============= GITHUB files', files);
         
         // 2️ Extract markdown file URLs
         const markdownFiles = files.filter(file => file.name.endsWith(".md"));
@@ -35,7 +35,7 @@ export async function getGithubFiles(gameName = 'madrapur') {
 
         const chapters = await Promise.all(chapterPromises);
         const introduction = chapters.find(chapter => chapter.name === 'introduction.md');
-        console.log('============= GITHUB chapters', chapters);
+        //console.log('============= GITHUB chapters', chapters);
         
         // 4️ Get list of files in the "images" folder
         const imageListUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${gameName}/images?ref=${GITHUB_BRANCH}`;
@@ -46,13 +46,14 @@ export async function getGithubFiles(gameName = 'madrapur') {
             console.log('========= GITHUB ACCESS error: ', error);
         });
 
-        console.log('============= GITHUB request.status', imageListResponse.status);
+        //console.log('============= GITHUB request.status', imageListResponse.status);
 
         if (!imageListResponse.ok) throw new Error("Failed to fetch image list");
 
         const images = await imageListResponse.json();
         const cover = images.find(image => image.name.includes('cover'));
-        console.log('============= GITHUB images', images);
+        //console.log('============= GITHUB images', images);
+        //console.log('============= GITHUB cover', cover);
 
         // 5️ Extract image file URLs
         const imageFiles = images.filter(file => file.type === "file");

@@ -1,22 +1,20 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
 import { useData } from '../../context/DataContext';
 import { useAuth } from '../../layout';
 import { useParams } from 'next/navigation';
-
 
 function Chapter() {
   const { data: data, setData } = useData();
   const { game, chapter } = useParams();
   const { user, handleSignIn, handleSignOut } = useAuth();
+  const [selectedChapter, setSelectedChapter] = useState(null); // State for selected chapter
 
   useEffect(() => {
     if (user && !data) {
       user.getIdToken().then((idToken) => {
-        const gameName = "madrapur";
-        fetch(`/api/game/${gameName}`, {
+        fetch(`/api/game/${game}`, {
           headers: {
             Authorization: `Bearer ${idToken}`, // Pass Firebase ID token in Authorization header
           },
@@ -25,6 +23,9 @@ function Chapter() {
           .then((json) => {
             console.log("CLIENT: /api/games response", json);
             setData(json);
+            if (json.githubData?.chapters?.length > 0) {
+              setSelectedChapter(json.githubData.chapters[0]); // Default to the first chapter
+            }
           })
           .catch((error) => {
             console.log("ERROR: /api/games", error);
@@ -52,13 +53,27 @@ function Chapter() {
   }
 
   return (
-    <>
-      <h1>{game} - {chapter}</h1>
-      {user && data && data.chapters.map((game, i) => (
-        <Link key={i} href={`/${game.id}`}>{game.name}</Link>
-      ))}
-      <button onClick={handleSignOut}>Sign Out</button>
-    </>
+    <div className="chapterWrapper">
+      {/* Left Column: List of Chapters */}
+      <div className="leftColumn">
+        <h2>Chapters</h2>
+        {data.githubData?.chapters.map((chapter, index) => (
+          <div
+            key={index}
+            className={`chapterItem ${selectedChapter?.name === chapter.name ? 'selected' : ''}`}
+            onClick={() => setSelectedChapter(chapter)} // Set the selected chapter
+          >
+            {chapter.name}
+          </div>
+        ))}
+      </div>
+
+      {/* Right Column: Selected Chapter Content */}
+      <div className="rightColumn">
+        <h2>{selectedChapter?.name || 'Select a Chapter'}</h2>
+        <p>{selectedChapter?.content || 'No content available'}</p>
+      </div>
+    </div>
   );
 }
 

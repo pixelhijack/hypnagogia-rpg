@@ -18,8 +18,9 @@ export async function verifyFirebaseIdToken(req) {
 
 export async function getUserFromFirestore(email) {
   const usersSnapshot = await adminDb.collection("users").get();
-  const users = usersSnapshot.docs.map((doc) => doc.data())[0];
-  const user = Object.values(users).find((user) => user.email === email);
+  const users = usersSnapshot.docs.map((doc) => doc.data());
+  console.log("users", users);
+  const user = users.find((user) => user.email === email);
 
   if (!user) {
     throw new Error("User not found");
@@ -32,4 +33,10 @@ export async function getUserGames(user) {
   const gamesSnapshot = await adminDb.collection("games").get();
   const games = gamesSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
   return games.filter((game) => user.games?.includes(game.id));
+}
+
+export async function getGames() {
+    const gamesSnapshot = await adminDb.collection("games").get();
+    const games = gamesSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    return games;
 }
