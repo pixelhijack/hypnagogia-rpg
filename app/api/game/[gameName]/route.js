@@ -21,7 +21,9 @@ export async function GET(req, { params }) {
     const userGames = games.filter((game) => user.games.map(game => game.gameName)?.includes(game.name));
     
     const characterName = user.games.find((game) => game.gameName === gameName)?.characterName;
-    user = { ...user, characterName };
+    // user testing:
+     user = { ...user, characterName: 'excilio' };
+    //user = { ...user, characterName };
 
     if (!userGames.some((game) => game.name === gameName)) {
       return new Response(JSON.stringify({ error: "User has not joined this game" }), { status: 403 });
@@ -42,7 +44,7 @@ export async function GET(req, { params }) {
         chapters: githubData.chapters.map((chapter) => ({
           ...chapter,
           content: processMarkdownContent(chapter.content, user)
-        }))
+        })).filter((chapter) => chapter.content.length > 0)
       };
       setCache(cacheKey, githubData, 60000); // Cache for 60 seconds
     }
@@ -61,14 +63,16 @@ export async function GET(req, { params }) {
 
 function processMarkdownContent(markdown, user) {
   const slicedByNames = sliceMarkdownByAtNames(markdown);
-  //const authorizedContent = slicedByNames.filter(group => group.names.includes(user?.characterName?.toLowerCase()));
-  console.log('============= slicedByNames', slicedByNames);
-  return slicedByNames
-    /*
-    .filter(group => group.names.some(
-      name => name === user?.characterName?.toLowerCase() || name === "@all"
-    ))
-    */
+  const authorizedContent = user.characterName.toLowerCase() === 'dm'
+    ? slicedByNames // If the user is 'dm', include all groups
+    : slicedByNames.filter(group =>
+        group.names.some(name =>
+          name.toLowerCase() === user.characterName.toLowerCase() || name === '@all'
+        )
+      );
+
+  const mdToHTML = authorizedContent
     .map(group => marked(group.content))
     .join('').replace(/@\w+/g, '');
+  return mdToHTML;
 }
