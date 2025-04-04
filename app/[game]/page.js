@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useData } from '../context/DataContext';
 import { useAuth } from '../layout';
 import { useParams } from 'next/navigation';
+import InteractionForm from '../components/InteractionForm';
 
 function Chapter() {
   const [ data, setData ] = useState();
@@ -93,7 +94,13 @@ function Chapter() {
 
       {/* Right Column: Selected Chapter Content */}
       <div className="rightColumn" onClick={() => setIsLeftColumnOpen(!isLeftColumnOpen)}>
-        <p dangerouslySetInnerHTML={{ __html: selectedChapter?.content }} />
+        <div dangerouslySetInnerHTML={{ __html: selectedChapter?.content }} />
+        {/* Show interaction form on last chapter */}
+        {data.githubData?.chapters[data.githubData?.chapters.length - 1]?.title === selectedChapter.title && (
+          <div className="interactionForm">
+            <InteractionForm game={game} user={user} />
+          </div>
+        )}
       </div>
     </div>
   );

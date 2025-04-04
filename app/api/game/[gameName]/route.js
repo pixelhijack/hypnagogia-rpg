@@ -1,3 +1,4 @@
+import { adminDb, FieldValue } from "../../../firebaseAdmin"; // Import Firestore Admin instance
 import { verifyFirebaseIdToken, getUserFromFirestore, getGames } from "../../../utils/authUtils";
 import { getGithubFiles, sliceMarkdownByAtNames, extractTitleFromMarkdown } from "../../../utils/githubUtils";
 import { getCache, setCache } from "../../../utils/cache";
@@ -78,4 +79,43 @@ function processMarkdownContent(markdown, user) {
     .map(group => marked(group.content))
     .join('').replace(/@\w+/g, '');
   return mdToHTML;
+}
+
+
+export async function POST(req, { params }) {
+  const { gameName } = params;
+
+  try {
+    // Verify the Firebase ID token
+    const decodedToken = await verifyFirebaseIdToken(req);
+    const user = await getUserFromFirestore(decodedToken.email);
+
+    if (!user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
+
+    // Parse the request body
+    const body = await req.json();
+    const { text } = body;
+
+    if (!text || text.trim() === "") {
+      return new Response(JSON.stringify({ error: "Text is required" }), { status: 400 });
+    }
+
+    await adminDb.collection("interactions").doc(gameName).set(
+      {
+        messages: FieldValue.arrayUnion({
+          user: user.email,
+          text: text.trim(),
+          dateUpdated: new Date(),
+        }),
+      },
+      { merge: true } // Merge with existing data instead of overwriting
+    );
+
+    return new Response(JSON.stringify({ message: "Interaction added successfully" }), { status: 200 });
+  } catch (error) {
+    console.error("Error in POST /api/game/[gameName]:", error);
+    return new Response(JSON.stringify({ error: error.message || "Internal Server Error" }), { status: 500 });
+  }
 }
