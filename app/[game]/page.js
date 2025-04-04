@@ -10,6 +10,7 @@ function Chapter() {
   const { game } = useParams();
   const { user, handleSignIn, handleSignOut } = useAuth();
   const [selectedChapter, setSelectedChapter] = useState(null); // State for selected chapter
+  const [isLeftColumnOpen, setIsLeftColumnOpen] = useState(false); // State for left column visibility
 
   useEffect(() => {
     if (user && !data?.githubData) {
@@ -54,14 +55,25 @@ function Chapter() {
 
   return (
     <div className="chapterWrapper">
+      {/* Hamburger Icon for Mobile */}
+      <button
+        className="hamburgerButton"
+        onClick={() => setIsLeftColumnOpen(!isLeftColumnOpen)}
+      >
+        { isLeftColumnOpen ? '✖' : '☰'}
+      </button>
+
       {/* Left Column: List of Chapters */}
-      <div className="leftColumn">
+      <div className={`leftColumn ${isLeftColumnOpen ? 'open' : 'collapsed'}`}>
         <h2>Chapters</h2>
         {data.githubData?.chapters.map((chapter, index) => (
           <div
             key={index}
             className={`chapterItem ${selectedChapter?.name === chapter.name ? 'selected' : ''}`}
-            onClick={() => setSelectedChapter(chapter)} // Set the selected chapter
+            onClick={() => {
+              setIsLeftColumnOpen(false);
+              setSelectedChapter(chapter);
+            }} 
           >
             {chapter.name}
           </div>
@@ -69,7 +81,7 @@ function Chapter() {
       </div>
 
       {/* Right Column: Selected Chapter Content */}
-      <div className="rightColumn">
+      <div className="rightColumn" onClick={() => setIsLeftColumnOpen(!isLeftColumnOpen)}>
         <p dangerouslySetInnerHTML={{ __html: selectedChapter?.content }} />
       </div>
     </div>

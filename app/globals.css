@@ -34,7 +34,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: normal;
 }
 h1, h2, h3 {
-  padding: 50px;
+  padding: 20px 0;
 }
 
 * {
@@ -88,7 +88,12 @@ blockquote {
   display: flex;
   flex-direction: row;
   height: 100vh;
+  max-width: 100%;
   margin: 30px 0;
+}
+
+.hamburgerButton {
+  display: none;
 }
 
 /* Left Column: List of Chapters */
@@ -105,6 +110,10 @@ blockquote {
   flex: 2;
   padding: 1rem;
   overflow-y: auto;
+}
+
+.rightColumn p {
+  padding-bottom: 1rem;
 }
 
 /* Highlight selected chapter */
@@ -135,6 +144,33 @@ blockquote {
 @media (max-width: 768px) {
   .gameCard {
     max-width: 100%; /* Full width on mobile */
+  }
+  .hamburgerButton {
+    display: block;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+  }
+  .leftColumn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 70%; /* Adjust width for mobile */
+    background-color: var(--background);
+    z-index: 5;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Left Column: Collapsed State */
+  .leftColumn.collapsed {
+    transform: translateX(-100%); /* Move off-screen to the left */
+  }
+
+  /* Left Column: Open State */
+  .leftColumn.open {
+    transform: translateX(0); /* Fully visible */
   }
 }
 
