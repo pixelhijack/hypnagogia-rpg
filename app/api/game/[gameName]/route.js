@@ -1,5 +1,5 @@
 import { verifyFirebaseIdToken, getUserFromFirestore, getGames } from "../../../utils/authUtils";
-import { getGithubFiles, sliceMarkdownByAtNames } from "../../../utils/githubUtils";
+import { getGithubFiles, sliceMarkdownByAtNames, extractTitleFromMarkdown } from "../../../utils/githubUtils";
 import { getCache, setCache } from "../../../utils/cache";
 import { marked } from "marked";
 
@@ -12,6 +12,7 @@ export async function GET(req, { params }) {
   try {
     const decodedToken = await verifyFirebaseIdToken(req);
     let user = await getUserFromFirestore(decodedToken.email);
+    //let user = await getUserFromFirestore("imreta@gmail.com");
     const games = await getGames();
     const currentGame = games.find((game) => game.name === gameName);
     if (!currentGame) {
@@ -25,8 +26,10 @@ export async function GET(req, { params }) {
     //user = { ...user, characterName: 'excilio' };
     user = { ...user, characterName };
 
-    if (!userGames.some((game) => game.name === gameName)) {
-      return new Response(JSON.stringify({ error: "User has not joined this game" }), { status: 403 });
+    if (!characterName) {
+      return new Response(JSON.stringify({ 
+        error: "Ehhez a játékhoz nem csatlakoztál még, mint játékos." 
+      }), { status: 404 });
     }
 
     // Check cache for GitHub files

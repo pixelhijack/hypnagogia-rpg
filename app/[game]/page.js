@@ -6,14 +6,14 @@ import { useAuth } from '../layout';
 import { useParams } from 'next/navigation';
 
 function Chapter() {
-  const { data: data, setData } = useData();
+  const [ data, setData ] = useState();
   const { game } = useParams();
   const { user, handleSignIn, handleSignOut } = useAuth();
   const [selectedChapter, setSelectedChapter] = useState(null); // State for selected chapter
   const [isLeftColumnOpen, setIsLeftColumnOpen] = useState(false); // State for left column visibility
 
   useEffect(() => {
-    if (user && !data?.githubData) {
+    if (user && !data?.githubData && !data?.error) {
       user.getIdToken().then((idToken) => {
         fetch(`/api/game/${game}`, {
           headers: {
@@ -25,11 +25,12 @@ function Chapter() {
             console.log("CLIENT: /api/games response", json);
             setData(json);
             if (json.githubData?.chapters?.length > 0) {
-              setSelectedChapter(json.githubData.chapters[0]); // Default to the first chapter
+              setSelectedChapter(json.githubData.chapters[json.githubData.chapters.length - 1]); // Default to the last chapter
             }
           })
           .catch((error) => {
             console.log("ERROR: /api/games", error);
+            setData({ error: "Disaster happened. Please try again later." });
           });
       });
     }
@@ -41,6 +42,16 @@ function Chapter() {
         <h1>Kalandjáték - csak beavatottaknak</h1>
         <p>Meghívott vagy? Próbálj belépni, és kiderül!</p>
         <button onClick={handleSignIn}>Sign In With Google</button>
+      </>
+    );
+  }
+
+  console.log("CLIENT: Chapter state", data);
+
+  if (data?.error) {
+    return (
+      <>
+        <h1>{data.error}</h1>
       </>
     );
   }
@@ -65,7 +76,7 @@ function Chapter() {
 
       {/* Left Column: List of Chapters */}
       <div className={`leftColumn ${isLeftColumnOpen ? 'open' : 'collapsed'}`}>
-        <h2>Chapters</h2>
+        <h2>Tartalom</h2>
         {data.githubData?.chapters.map((chapter, index) => (
           <div
             key={index}
@@ -75,7 +86,7 @@ function Chapter() {
               setSelectedChapter(chapter);
             }} 
           >
-            {chapter.name}
+            {chapter.title}
           </div>
         ))}
       </div>

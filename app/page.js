@@ -1,18 +1,18 @@
 'use client'
 
 import styles from './page.module.css';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useData } from './context/DataContext';
 import { useAuth } from './layout';
 
 
 function Landing() {
-  const { data, setData } = useData();
+  const [data, setData]  = useState();
   const { user, handleSignIn, handleSignOut } = useAuth();
 
   useEffect(() => {
-    if (user && !data) {
+    if (user && !data && !data?.error) {
       user.getIdToken().then((idToken) => {
         fetch("/api/games", {
           headers: {
@@ -26,10 +26,13 @@ function Landing() {
           })
           .catch((error) => {
             console.log("ERROR: /api/games", error);
+            setData({ error: "Disaster happened. Please try again later." });
           });
       });
     }
   }, [user, data]);
+
+  console.log("CLIENT: Landing state", data);
 
   if(!user) {
     return (
@@ -40,6 +43,15 @@ function Landing() {
       </>
     )
   };
+
+  if (data?.error) {
+    return (
+      <>
+        <h1>{data.error}</h1>
+      </>
+    );
+  }
+
   if (!data) {
     return (
       <>
@@ -68,7 +80,7 @@ function Landing() {
       }
       <h2>Más történetek, amikre jelentkezhetsz játékosnak: </h2>
       {
-        user && data && data?.games
+        user && data?.games && data?.games
           .filter(game => !data.userGames.some(userGame => userGame.id === game.id)) // Exclude already displayed userGames
           .map((game, i) => (
             <Link key={i} href={`/${game.id}`} style={{ textDecoration: 'none' }}>

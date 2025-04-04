@@ -37,7 +37,12 @@ export async function getGithubFiles(gameName = 'madrapur') {
         const chapterPromises = markdownFiles.map(async (file) => {
             const fileResponse = await fetch(file.download_url);
             const content = await fileResponse.text();
-            return { name: file.name, content };
+            const title = extractTitleFromMarkdown(content);
+            return { 
+              name: file.name, 
+              content,
+              title 
+          };
         });
 
         const chapters = await Promise.all(chapterPromises);
@@ -109,3 +114,22 @@ export function sliceMarkdownByAtNames(markdown) {
   
     return result;
   }
+
+  export function extractTitleFromMarkdown(content) {
+    // Remove @name references
+    const cleanedContent = content.replace(/@\w+/g, '').trim();
+
+    // Find the first H1 line (starting with #)
+    const h1Match = cleanedContent.match(/^#\s*(.+)$/m);
+    if (h1Match) {
+        return h1Match[1].trim(); // Return the H1 title without markdown syntax
+    }
+
+    // If no H1 is found, use the first 100 characters as the title
+    const plainText = cleanedContent
+        .replace(/[#*_`~>\-\[\]()]/g, '') // Remove markdown-specific characters
+        .replace(/\s+/g, ' ') // Replace multiple spaces/newlines with a single space
+        .trim();
+
+    return plainText.substring(0, 100); // Return the first 100 characters
+}

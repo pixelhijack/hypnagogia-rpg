@@ -56,7 +56,7 @@ function Chapter() {
     <div className="chapterWrapper">
       {/* Left Column: List of Chapters */}
       <div className="leftColumn">
-        <h2>Chapters</h2>
+        <h2>Fejezet</h2>
         {data.githubData?.chapters.map((chapter, index) => (
           <div
             key={index}
