@@ -50,21 +50,40 @@ function Landing() {
 
   return (
     <>
-      <h1>Welcome, {user.displayName}</h1>
+      <h1>Isten hozott, {user.displayName}</h1>
+      <h2>Aktív történeteid:</h2>
       {
-        user && data && data?.games?.map((game, i) => (
+        user && data && data?.userGames?.map((game, i) => (
           <Link key={i} href={`/${game.id}`} style={{ textDecoration: 'none' }}>
             <div className={'gameCard'} style={{ backgroundImage: `url(${game.coverImage})` }}>
-            <h2>
-              <span className="highlightedText">{game.name}</span>
-            </h2>
-            <p>
-              <span className="highlightedText">{game.introduction}</span>
-            </p>
+              <h2>
+                <span className="highlightedText">{game.name}</span>
+              </h2>
+              <p>
+                <span className="highlightedText">{game.introduction}</span>
+              </p>
             </div>
           </Link>
         ))
       }
+      <h2>Más történetek, amikre jelentkezhetsz játékosnak: </h2>
+      {
+        user && data && data?.games
+          .filter(game => !data.userGames.some(userGame => userGame.id === game.id)) // Exclude already displayed userGames
+          .map((game, i) => (
+            <Link key={i} href={`/${game.id}`} style={{ textDecoration: 'none' }}>
+              <div className={'gameCard'} style={{ backgroundImage: `url(${game.coverImage})` }}>
+                <h2>
+                  <span className="highlightedText">{game.name}</span>
+                </h2>
+                <p>
+                  <span className="highlightedText">{game.introduction}</span>
+                </p>
+              </div>
+            </Link>
+          ))
+      }
+      <br />
       <button onClick={handleSignOut}>Sign Out</button>
     </>
   )

@@ -22,8 +22,8 @@ export async function GET(req, { params }) {
     
     const characterName = user.games.find((game) => game.gameName === gameName)?.characterName;
     // user testing:
-     user = { ...user, characterName: 'excilio' };
-    //user = { ...user, characterName };
+    //user = { ...user, characterName: 'excilio' };
+    user = { ...user, characterName };
 
     if (!userGames.some((game) => game.name === gameName)) {
       return new Response(JSON.stringify({ error: "User has not joined this game" }), { status: 403 });
