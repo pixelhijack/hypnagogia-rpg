@@ -42,7 +42,6 @@ export async function GET(req, { params }) {
       console.log("=== NO CACHE === refreshing...");
       console.log("==============================");
       githubData = await getGithubFiles(gameName);
-      console.log("=========== githubData", githubData);
       githubData = {
         ...githubData,
         chapters: githubData.chapters.map((chapter) => ({

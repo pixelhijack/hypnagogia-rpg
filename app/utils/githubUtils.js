@@ -2,84 +2,48 @@ const GITHUB_REPO = "pixelhijack/rpg-scenes";
 const GITHUB_BRANCH = "master";
 const GITHUB_ACCESS_TOKEN = process.env.GITHUB_ACCESS_TOKEN; // Securely store token
 
-// Cache storage for ETags
-const etagCache = new Map();
-
 export async function getGithubFiles(gameName = 'madrapur') {
-    try {
-        const fileListUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${gameName}?ref=${GITHUB_BRANCH}`;
-        
-        // Check if we have an ETag for this request
-        const headers = GITHUB_ACCESS_TOKEN ? { Authorization: `token ${GITHUB_ACCESS_TOKEN}` } : {};
-        const cachedEtag = etagCache.get(fileListUrl);
-        if (cachedEtag) {
-            headers["If-None-Match"] = cachedEtag;
-        }
+  try {
+    const fileListUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${gameName}?ref=${GITHUB_BRANCH}`;
+    const headers = GITHUB_ACCESS_TOKEN ? { Authorization: `token ${GITHUB_ACCESS_TOKEN}` } : {};
 
-        const fileListResponse = await fetch(fileListUrl, { headers });
+    const fileListResponse = await fetch(fileListUrl, { headers });
 
-        if (fileListResponse.status === 304) {
-            console.log("Cache HIT: Using cached data for", fileListUrl);
-            return { chapters: [], imageFiles: [] }; // Return cached data here if you store it
-        }
+    if (!fileListResponse.ok) throw new Error("Failed to fetch file list");
 
-        if (!fileListResponse.ok) throw new Error("Failed to fetch file list");
+    const files = await fileListResponse.json();
+    const markdownFiles = files.filter(file => file.name.endsWith(".md"));
 
-        // Update ETag cache
-        const newEtag = fileListResponse.headers.get("ETag");
-        if (newEtag) {
-            etagCache.set(fileListUrl, newEtag);
-        }
+    const chapterPromises = markdownFiles.map(async (file) => {
+      const fileResponse = await fetch(file.download_url);
+      const content = await fileResponse.text();
+      const title = extractTitleFromMarkdown(content);
+      return { 
+        name: file.name, 
+        content,
+        title 
+      };
+    });
 
-        const files = await fileListResponse.json();
-        const markdownFiles = files.filter(file => file.name.endsWith(".md"));
+    const chapters = await Promise.all(chapterPromises);
 
-        const chapterPromises = markdownFiles.map(async (file) => {
-            const fileResponse = await fetch(file.download_url);
-            const content = await fileResponse.text();
-            const title = extractTitleFromMarkdown(content);
-            return { 
-              name: file.name, 
-              content,
-              title 
-          };
-        });
+    const imageListUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${gameName}/images?ref=${GITHUB_BRANCH}`;
+    const imageListResponse = await fetch(imageListUrl, { headers });
 
-        const chapters = await Promise.all(chapterPromises);
+    if (!imageListResponse.ok) throw new Error("Failed to fetch image list");
 
-        const imageListUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${gameName}/images?ref=${GITHUB_BRANCH}`;
-        const imageListHeaders = { ...headers };
-        const cachedImageEtag = etagCache.get(imageListUrl);
-        if (cachedImageEtag) {
-            imageListHeaders["If-None-Match"] = cachedImageEtag;
-        }
+    const images = await imageListResponse.json();
+    const imageFiles = images.filter(file => file.type === "file").map(file => ({
+      name: file.name,
+      url: `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${file.path}`,
+      path: file.path
+    }));
 
-        const imageListResponse = await fetch(imageListUrl, { headers: imageListHeaders });
-
-        if (imageListResponse.status === 304) {
-            console.log("Cache HIT: Using cached data for", imageListUrl);
-            return { chapters, imageFiles: [] }; // Return cached data here if you store it
-        }
-
-        if (!imageListResponse.ok) throw new Error("Failed to fetch image list");
-
-        const newImageEtag = imageListResponse.headers.get("ETag");
-        if (newImageEtag) {
-            etagCache.set(imageListUrl, newImageEtag);
-        }
-
-        const images = await imageListResponse.json();
-        const imageFiles = images.filter(file => file.type === "file").map(file => ({
-            name: file.name,
-            url: `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${file.path}`,
-            path: file.path
-        }));
-
-        return { chapters, imageFiles };
-    } catch (e) {
-        console.error("Failed to fetch scene files from GitHub", e);
-        return { chapters: [], imageFiles: [] };
-    }
+    return { chapters, imageFiles };
+  } catch (e) {
+    console.error("Failed to fetch scene files from GitHub", e);
+    return { chapters: [], imageFiles: [] };
+  }
 }
 
 export function sliceMarkdownByAtNames(markdown) {
