@@ -12,6 +12,7 @@ function Chapter() {
   const { user, handleSignIn, handleSignOut } = useAuth();
   const [selectedChapter, setSelectedChapter] = useState(null); // State for selected chapter
   const [isLeftColumnOpen, setIsLeftColumnOpen] = useState(false); // State for left column visibility
+  const [interactions, setInteractions] = useState([]); 
 
   useEffect(() => {
     if (user && !data?.githubData && !data?.error) {
@@ -25,6 +26,7 @@ function Chapter() {
           .then((json) => {
             console.log("CLIENT: /api/games response", json);
             setData(json);
+            // By default open on the last chapter
             if (json.githubData?.chapters?.length > 0) {
               setSelectedChapter(json.githubData.chapters[json.githubData.chapters.length - 1]); // Default to the last chapter
             }
@@ -32,6 +34,26 @@ function Chapter() {
           .catch((error) => {
             console.log("ERROR: /api/games", error);
             setData({ error: "Disaster happened. Please try again later." });
+          });
+      });
+    }
+  }, [user, data]);
+
+  useEffect(() => {
+    if (user && data) {
+      user.getIdToken().then((idToken) => {
+        fetch(`/api/interactions/${game}`, {
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+          },
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            console.log("CLIENT: /api/interactions response", json);
+            setInteractions(json?.interactions || []);
+          })
+          .catch((error) => {
+            console.log("ERROR: /api/interactions", error);
           });
       });
     }
@@ -95,6 +117,15 @@ function Chapter() {
       {/* Right Column: Selected Chapter Content */}
       <div className="rightColumn" onClick={() => setIsLeftColumnOpen(!isLeftColumnOpen)}>
         <div dangerouslySetInnerHTML={{ __html: selectedChapter?.content }} />
+
+        {/* Show interactions if available */}
+        {interactions.map((interaction, index) => (
+          <div key={index} className="interactionItem">
+            <p>{interaction.formattedDate} - <strong>{interaction.characterName}:</strong></p>
+            <p>{interaction.text}</p>
+          </div>
+        ))}
+
         {/* Show interaction form on last chapter */}
         {data.githubData?.chapters[data.githubData?.chapters.length - 1]?.title === selectedChapter.title && (
           <div className="interactionForm">

@@ -85,13 +85,10 @@ export async function POST(req, { params }) {
   const { gameName } = params;
 
   try {
-    // Verify the Firebase ID token
     const decodedToken = await verifyFirebaseIdToken(req);
-    const user = await getUserFromFirestore(decodedToken.email);
-
-    if (!user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
-    }
+    let user = await getUserFromFirestore(decodedToken.email);
+    //let user = await getUserFromFirestore("imreta@gmail.com");
+    const characterName = user.games.find((game) => game.gameName === gameName)?.characterName;
 
     // Parse the request body
     const body = await req.json();
@@ -105,6 +102,8 @@ export async function POST(req, { params }) {
       {
         messages: FieldValue.arrayUnion({
           user: user.email,
+          characterName: characterName,
+          gameName: gameName,
           text: text.trim(),
           dateUpdated: new Date(),
         }),
