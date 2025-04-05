@@ -1,15 +1,22 @@
 :root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --base-font-size: 18px; 
+}
+
+/*  -> only makes dark for users having dark mode set:
+:root {
   --background: #ffffff;
   --foreground: #171717;
   --base-font-size: 18px; 
 }
-
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
 }
+*/
 
 html {
   font-size: var(--base-font-size);
@@ -114,6 +121,10 @@ blockquote {
 
 .rightColumn p {
   padding-bottom: 1rem;
+}
+
+.rightColumn p img {
+  max-width: 100%;
 }
 
 /* Highlight selected chapter */

@@ -27,6 +27,7 @@ export async function getGithubFiles(gameName = 'madrapur') {
 
     const chapters = await Promise.all(chapterPromises);
 
+    /*
     const imageListUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${gameName}/images?ref=${GITHUB_BRANCH}`;
     const imageListResponse = await fetch(imageListUrl, { headers });
 
@@ -38,11 +39,11 @@ export async function getGithubFiles(gameName = 'madrapur') {
       url: `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${file.path}`,
       path: file.path
     }));
-
-    return { chapters, imageFiles };
+    */
+    return { chapters };
   } catch (e) {
     console.error("Failed to fetch scene files from GitHub", e);
-    return { chapters: [], imageFiles: [] };
+    return { chapters: [] };
   }
 }
 
