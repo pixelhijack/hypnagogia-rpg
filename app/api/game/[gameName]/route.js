@@ -13,7 +13,7 @@ export async function GET(req, { params }) {
   try {
     const decodedToken = await verifyFirebaseIdToken(req);
     let user = await getUserFromFirestore(decodedToken.email);
-    //let user = await getUserFromFirestore("imreta@gmail.com");
+    //let user = await getUserFromFirestore("imrezo@gmail.com");
     const games = await getGames();
     const currentGame = games.find((game) => game.name === gameName);
     if (!currentGame) {
@@ -92,7 +92,7 @@ export async function POST(req, { params }) {
 
     // Parse the request body
     const body = await req.json();
-    const { text } = body;
+    const { text, chapter } = body;
 
     if (!text || text.trim() === "") {
       return new Response(JSON.stringify({ error: "Text is required" }), { status: 400 });
@@ -101,9 +101,11 @@ export async function POST(req, { params }) {
     await adminDb.collection("interactions").doc(gameName).set(
       {
         messages: FieldValue.arrayUnion({
+          gameName: gameName,
+          chapterTitle: chapter.title,
+          chapterFilename: chapter.name,
           user: user.email,
           characterName: characterName,
-          gameName: gameName,
           text: text.trim(),
           dateUpdated: new Date(),
         }),

@@ -3,6 +3,9 @@ import { verifyFirebaseIdToken } from "../../../utils/authUtils";
 
 export async function GET(req, { params }) {
   const { gameName } = params;
+  // Parse query parameters
+  const url = new URL(req.url, `http://${req.headers.host}`);
+  const chapterName = url.searchParams.get("chapterName");
 
   try {
     // Verify the Firebase ID token
@@ -21,8 +24,10 @@ export async function GET(req, { params }) {
 
     const interactionsData = doc.data();
     const filteredInteractions = interactionsData.messages.filter(
-      (interaction) => !interaction.text.toLowerCase().includes("@dm")
-    );
+        (interaction) =>
+          !interaction.text.toLowerCase().includes("@dm") && // Exclude messages with sent to the DM
+          (!chapterName || interaction.chapterFilename === chapterName) // only send messages from the selected chapter
+      );
 
     return new Response(JSON.stringify({ interactions: filteredInteractions }), { status: 200 });
   } catch (error) {

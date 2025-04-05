@@ -17,7 +17,7 @@ function Chapter() {
   const fetchInteractions = () => {
     if (user) {
       user.getIdToken().then((idToken) => {
-        fetch(`/api/interactions/${game}`, {
+        fetch(`/api/interactions/${game}?chapterName=${encodeURIComponent(selectedChapter.name)}`, {
           headers: {
             Authorization: `Bearer ${idToken}`,
           },
@@ -60,7 +60,9 @@ function Chapter() {
   }, [user, data]);
 
   useEffect(() => {
-    fetchInteractions();
+    if (user && selectedChapter) {
+      fetchInteractions();
+    }
   }, [user, data]);
 
   if (!user) {
@@ -133,7 +135,12 @@ function Chapter() {
         {/* Show interaction form on last chapter */}
         {data.githubData?.chapters[data.githubData?.chapters.length - 1]?.title === selectedChapter.title && (
           <div className="interactionForm">
-            <InteractionForm game={game} user={user} afterSave={fetchInteractions} />
+            <InteractionForm 
+              game={game} 
+              chapter={selectedChapter}
+              user={user} 
+              afterSave={fetchInteractions} 
+            />
           </div>
         )}
       </div>
