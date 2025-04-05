@@ -2,10 +2,9 @@
     position: relative;
     color: var(--foreground);
     font-size: 2rem;
-    font-family: 'Courier New', Courier, monospace;
-    text-transform: uppercase;
     letter-spacing: 2px;
-    animation: glitch 1s infinite;
+    animation: glitch 6s infinite; /* 1s glitch + 5s delay */
+    animation-timing-function: ease-in-out;
   }
   
   .glitch::before,
@@ -24,13 +23,15 @@
   .glitch::before {
     left: 2px;
     text-shadow: -2px 0 red;
-    animation: glitch-before 1s infinite;
+    animation: glitch-before 6s infinite; /* 1s glitch + 5s delay */
+    animation-timing-function: ease-in-out;
   }
   
   .glitch::after {
     left: -2px;
     text-shadow: -2px 0 blue;
-    animation: glitch-after 1s infinite;
+    animation: glitch-after 6s infinite; /* 1s glitch + 5s delay */
+    animation-timing-function: ease-in-out;
   }
   
   @keyframes glitch {

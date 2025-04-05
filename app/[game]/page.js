@@ -123,6 +123,7 @@ function Chapter() {
 
       {/* Right Column: Selected Chapter Content */}
       <div className="rightColumn" onClick={() => setIsLeftColumnOpen(!isLeftColumnOpen)}>
+
         <div dangerouslySetInnerHTML={{ __html: selectedChapter?.content }} />
 
         {/* Show interactions if available */}

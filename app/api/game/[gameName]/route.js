@@ -1,4 +1,3 @@
-import { adminDb, FieldValue } from "../../../firebaseAdmin"; // Import Firestore Admin instance
 import { verifyFirebaseIdToken, getUserFromFirestore, getGames } from "../../../utils/authUtils";
 import { getGithubFiles, sliceMarkdownByAtNames, extractTitleFromMarkdown } from "../../../utils/githubUtils";
 import { getCache, setCache } from "../../../utils/cache";
@@ -57,7 +56,6 @@ export async function GET(req, { params }) {
       githubData,
       userGames,
       currentGame,
-      user,
       games
     }), { status: 200 });
   } catch (error) {
@@ -83,41 +81,3 @@ function processMarkdownContent(markdown, user) {
 }
 
 
-export async function POST(req, { params }) {
-  const { gameName } = params;
-
-  try {
-    const decodedToken = await verifyFirebaseIdToken(req);
-    let user = await getUserFromFirestore(decodedToken.email);
-    const additionalUserInfo = user.games.find((game) => game.gameName === gameName);
-
-    // Parse the request body
-    const body = await req.json();
-    const { text, chapter } = body;
-
-    if (!text || text.trim() === "") {
-      return new Response(JSON.stringify({ error: "Text is required" }), { status: 400 });
-    }
-
-    await adminDb.collection("interactions").doc(gameName).set(
-      {
-        messages: FieldValue.arrayUnion({
-          gameName: gameName,
-          chapterTitle: chapter.title,
-          chapterFilename: chapter.name,
-          user: user.email,
-          characterName: additionalUserInfo.characterName,
-          shortName: additionalUserInfo.shortName,
-          text: text.trim(),
-          dateUpdated: new Date(),
-        }),
-      },
-      { merge: true } // Merge with existing data instead of overwriting
-    );
-
-    return new Response(JSON.stringify({ message: "Interaction added successfully" }), { status: 200 });
-  } catch (error) {
-    console.error("Error in POST /api/game/[gameName]:", error);
-    return new Response(JSON.stringify({ error: error.message || "Internal Server Error" }), { status: 500 });
-  }
-}

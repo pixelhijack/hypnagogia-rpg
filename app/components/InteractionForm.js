@@ -16,7 +16,7 @@ function InteractionForm({ user, game, afterSave, chapter }) {
 
     try {
       const idToken = await user.getIdToken(); 
-      const response = await fetch(`/api/game/${game}`, {
+      const response = await fetch(`/api/interactions/${game}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './LoadingAnimation.module.css'; 
 
-const randomCharacters = 'ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝ:・."=*+-<>¦｜ﾘ';
+const randomCharacters = 'ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾝ:・."=*+-<>¦｜ﾘ';
 
 function LoadingAnimation() {
   const [displayText, setDisplayText] = useState(['L', 'o', 'a', 'd', 'i', 'n', 'g', '.', '.', '.']);
@@ -26,7 +26,7 @@ function LoadingAnimation() {
         // Reset the animation by restarting from the first letter
         setCurrentIndex(0);
       }
-    }, 50); // Adjust speed of shuffling here
+    }, 100); // Adjust speed of shuffling here
 
     return () => clearInterval(interval); // Cleanup interval on unmount
   }, [currentIndex, finalText]);
