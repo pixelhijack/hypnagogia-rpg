@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useData } from './context/DataContext';
 import { useAuth } from './layout';
+import LoadingAnimation from './components/LoadingAnimation';
 
 
 function Landing() {
@@ -54,9 +55,9 @@ function Landing() {
 
   if (!data) {
     return (
-      <>
-        <h1>Loading...</h1>
-      </>
+      <h1>
+        <LoadingAnimation />
+      </h1>
     )
   };
 

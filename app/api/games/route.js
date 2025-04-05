@@ -10,8 +10,7 @@ export async function GET(req, { params }) {
 
   try {
     const decodedToken = await verifyFirebaseIdToken(req);
-    //const user = await getUserFromFirestore(decodedToken.email);
-    const user = await getUserFromFirestore("imreta@gmail.com");
+    const user = await getUserFromFirestore(decodedToken.email);
     const games = await getGames();
     const userGames = games.filter((game) => user.games.map(game => game.gameName)?.includes(game.id));
 

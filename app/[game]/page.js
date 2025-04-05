@@ -5,6 +5,7 @@ import { useData } from '../context/DataContext';
 import { useAuth } from '../layout';
 import { useParams } from 'next/navigation';
 import InteractionForm from '../components/InteractionForm';
+import LoadingAnimation from '../components/LoadingAnimation';
 
 function Chapter() {
   const [ data, setData ] = useState();
@@ -87,9 +88,9 @@ function Chapter() {
 
   if (!data?.githubData) {
     return (
-      <>
-        <h1>Loading...</h1>
-      </>
+      <h1>
+        <LoadingAnimation />
+      </h1>
     );
   }
 

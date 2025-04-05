@@ -13,7 +13,6 @@ export async function GET(req, { params }) {
   try {
     const decodedToken = await verifyFirebaseIdToken(req);
     let user = await getUserFromFirestore(decodedToken.email);
-    //let user = await getUserFromFirestore("imrezo@gmail.com");
     const games = await getGames();
     const currentGame = games.find((game) => game.name === gameName);
     if (!currentGame) {
@@ -22,16 +21,19 @@ export async function GET(req, { params }) {
 
     const userGames = games.filter((game) => user.games.map(game => game.gameName)?.includes(game.name));
     
-    const characterName = user.games.find((game) => game.gameName === gameName)?.characterName;
-    // user testing:
-    //user = { ...user, characterName: 'excilio' };
-    user = { ...user, characterName };
-
-    if (!characterName) {
+    const additionalUserInfo = user.games.find((game) => game.gameName === gameName);
+    
+    if (!additionalUserInfo?.characterName) {
       return new Response(JSON.stringify({ 
-        error: "Ehhez a játékhoz nem csatlakoztál még, mint játékos." 
+        error: "Ehhez a játékhoz nem csatlakoztál még mint játékos." 
       }), { status: 404 });
     }
+
+    user = { 
+      ...user, 
+      characterName: additionalUserInfo.characterName, 
+      shortName: additionalUserInfo.shortName 
+    };
 
     // Check cache for GitHub files
     const cacheKey = `githubFiles:${gameName}`;
@@ -66,11 +68,11 @@ export async function GET(req, { params }) {
 
 function processMarkdownContent(markdown, user) {
   const slicedByNames = sliceMarkdownByAtNames(markdown);
-  const authorizedContent = user.characterName.toLowerCase() === 'dm'
+  const authorizedContent = user.shortName === 'dm'
     ? slicedByNames // If the user is 'dm', include all groups
     : slicedByNames.filter(group =>
         group.names.some(name =>
-          name.toLowerCase() === user.characterName.toLowerCase() || name === '@all'
+          name.toLowerCase() === user.shortName || name === '@all'
         )
       );
 
@@ -87,8 +89,7 @@ export async function POST(req, { params }) {
   try {
     const decodedToken = await verifyFirebaseIdToken(req);
     let user = await getUserFromFirestore(decodedToken.email);
-    //let user = await getUserFromFirestore("imreta@gmail.com");
-    const characterName = user.games.find((game) => game.gameName === gameName)?.characterName;
+    const additionalUserInfo = user.games.find((game) => game.gameName === gameName);
 
     // Parse the request body
     const body = await req.json();
@@ -105,7 +106,8 @@ export async function POST(req, { params }) {
           chapterTitle: chapter.title,
           chapterFilename: chapter.name,
           user: user.email,
-          characterName: characterName,
+          characterName: additionalUserInfo.characterName,
+          shortName: additionalUserInfo.shortName,
           text: text.trim(),
           dateUpdated: new Date(),
         }),

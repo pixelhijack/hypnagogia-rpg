@@ -20,7 +20,9 @@ export async function getUserFromFirestore(email) {
   const usersSnapshot = await adminDb.collection("users").get();
   const users = usersSnapshot.docs.map((doc) => doc.data());
   console.log("users", users);
-  const user = users.find((user) => user.email === email);
+  const user = process.env.TEST_USER ? 
+    users.find((user) => user.email === process.env.TEST_USER) : 
+    users.find((user) => user.email === email);
 
   if (!user) {
     throw new Error("User not found");

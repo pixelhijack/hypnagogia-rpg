@@ -78,10 +78,6 @@ input, textarea {
   min-width: 400px;
 }
 
-hr {
-  width: 30%;
-}
-
 
 blockquote {
   margin: 0 0 20px 0;
@@ -125,6 +121,12 @@ blockquote {
 
 .rightColumn p img {
   max-width: 100%;
+}
+
+.rightColumn hr {
+  margin: 10px 10px 30px 0px; 
+  width: 100%;
+  opacity: 0.1;
 }
 
 /* Highlight selected chapter */
