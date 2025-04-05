@@ -19,31 +19,12 @@ export async function GET(req, { params }) {
       return new Response(JSON.stringify({ error: "No interactions found for this game" }), { status: 404 });
     }
 
-     // Process the interactions data
     const interactionsData = doc.data();
-    const formattedInteractions = interactionsData.messages.map((interaction) => {
-      let formattedDate = "Unknown Date";
+    const filteredInteractions = interactionsData.messages.filter(
+      (interaction) => !interaction.text.toLowerCase().includes("@dm")
+    );
 
-      if (interaction.dateUpdated) {
-        if (interaction.dateUpdated.seconds) {
-          // Firestore Timestamp format
-          formattedDate = new Date(interaction.dateUpdated.seconds * 1000).toLocaleString();
-        } else if (typeof interaction.dateUpdated === "string") {
-          // ISO string format
-          formattedDate = new Date(interaction.dateUpdated).toLocaleString();
-        } else if (interaction.dateUpdated instanceof Date) {
-          // JavaScript Date object
-          formattedDate = interaction.dateUpdated.toLocaleString();
-        }
-      }
-
-      return {
-        ...interaction,
-        formattedDate, // Add the formatted date to the interaction object
-      };
-    });
-
-    return new Response(JSON.stringify({ interactions: formattedInteractions }), { status: 200 });
+    return new Response(JSON.stringify({ interactions: filteredInteractions }), { status: 200 });
   } catch (error) {
     console.error("Error in GET /api/interactions/[gameName]:", error);
     return new Response(JSON.stringify({ error: error.message || "Internal Server Error" }), { status: 500 });

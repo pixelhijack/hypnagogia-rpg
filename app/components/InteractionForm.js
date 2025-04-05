@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-function InteractionForm({ user, game }) {
+function InteractionForm({ user, game, afterSave }) {
   const [text, setText] = useState('');
   const [feedback, setFeedback] = useState(null); // Feedback message
 
@@ -33,6 +33,13 @@ function InteractionForm({ user, game }) {
 
       setFeedback('Postagalambod elrepült!'); 
       setText(''); // Clear the textarea
+
+      // After saving, we want to refresh the interactions
+      if (afterSave) {
+        setFeedback(''); 
+        afterSave();
+      }
+
     } catch (error) {
       console.error('Error adding interaction:', error);
       setFeedback('Postagalambod eltévedt. Kérjük, próbálkozz később újra.');
@@ -41,7 +48,8 @@ function InteractionForm({ user, game }) {
 
   return (
     <div>
-      {feedback ? <h2>{feedback}</h2> : <h2>Mit teszel?</h2>} 
+      <h2>Mit teszel?</h2>
+      <small>{feedback && <p style={{ color: 'darkred' }}>{feedback}</p>}</small>
       <form onSubmit={handleSubmit}>
         <textarea
           value={text}

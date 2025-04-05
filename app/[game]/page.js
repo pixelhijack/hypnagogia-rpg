@@ -14,6 +14,26 @@ function Chapter() {
   const [isLeftColumnOpen, setIsLeftColumnOpen] = useState(false); // State for left column visibility
   const [interactions, setInteractions] = useState([]); 
 
+  const fetchInteractions = () => {
+    if (user) {
+      user.getIdToken().then((idToken) => {
+        fetch(`/api/interactions/${game}`, {
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+          },
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            console.log("CLIENT: /api/interactions response", json);
+            setInteractions(json?.interactions || []);
+          })
+          .catch((error) => {
+            console.log("ERROR: /api/interactions", error);
+          });
+      });
+    }
+  };
+
   useEffect(() => {
     if (user && !data?.githubData && !data?.error) {
       user.getIdToken().then((idToken) => {
@@ -40,23 +60,7 @@ function Chapter() {
   }, [user, data]);
 
   useEffect(() => {
-    if (user && data) {
-      user.getIdToken().then((idToken) => {
-        fetch(`/api/interactions/${game}`, {
-          headers: {
-            Authorization: `Bearer ${idToken}`,
-          },
-        })
-          .then((response) => response.json())
-          .then((json) => {
-            console.log("CLIENT: /api/interactions response", json);
-            setInteractions(json?.interactions || []);
-          })
-          .catch((error) => {
-            console.log("ERROR: /api/interactions", error);
-          });
-      });
-    }
+    fetchInteractions();
   }, [user, data]);
 
   if (!user) {
@@ -121,7 +125,7 @@ function Chapter() {
         {/* Show interactions if available */}
         {interactions.map((interaction, index) => (
           <div key={index} className="interactionItem">
-            <p>{interaction.formattedDate} - <strong>{interaction.characterName}:</strong></p>
+            <p><strong>{interaction.characterName}:</strong></p>
             <p>{interaction.text}</p>
           </div>
         ))}
@@ -129,7 +133,7 @@ function Chapter() {
         {/* Show interaction form on last chapter */}
         {data.githubData?.chapters[data.githubData?.chapters.length - 1]?.title === selectedChapter.title && (
           <div className="interactionForm">
-            <InteractionForm game={game} user={user} />
+            <InteractionForm game={game} user={user} afterSave={fetchInteractions} />
           </div>
         )}
       </div>
