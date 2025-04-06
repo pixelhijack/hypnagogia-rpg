@@ -11,7 +11,7 @@ import LoadingAnimation from './components/LoadingAnimation';
 function Landing() {
   const [data, setData]  = useState();
   const { user, handleSignIn, handleSignOut } = useAuth();
-
+  const [joiningGameIds, setJoiningGameIds] = useState([]); // Track games the user has joined
 
   const fetchGames = async (headers) => {
     fetch("/api/games", {
@@ -43,6 +43,36 @@ function Landing() {
   useEffect(() => {
     setData(null); // Clear data to force re-fetch and refresh the view
   }, [user]);
+
+  const handleJoinGame = async (gameId) => {
+    if (!user) {
+      alert("Please sign in to join the game.");
+      return;
+    }
+
+    try {
+      const idToken = await user.getIdToken();
+      const response = await fetch("/api/joining", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({ gameId }),
+      });
+
+      if (response.ok) {
+        setJoiningGameIds((prev) => [...prev, gameId]); // Add the game ID to the joined list
+      } else {
+        const errorData = await response.json();
+        console.error("Error joining game:", errorData.error);
+        alert("Failed to join the game. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error in handleJoinGame:", error);
+      alert("An error occurred. Please try again.");
+    }
+  };
 
   console.log("CLIENT: Landing state", data);
 
@@ -129,7 +159,19 @@ function Landing() {
               <p>
                 <span className="highlightedText">{game.introduction}</span>
                 <br/>
-                <button style={{ margin: '10px 0 0 0', float: 'right', border: '1px solid grey'}}>Jelentkezés →</button>
+                <button
+                  onClick={() => handleJoinGame(game.id)}
+                  style={{
+                    margin: '10px 0 0 0',
+                    float: 'right',
+                    border: '1px solid grey',
+                  }}
+                  disabled={joiningGameIds.includes(game.id)} // Disable button if already joined
+                >
+                  {joiningGameIds.includes(game.id)
+                    ? "Jelentkezésed megkaptuk, nézz vissza később!"
+                    : "Jelentkezés →"}
+                </button>
               </p>
             </div>
           ))
