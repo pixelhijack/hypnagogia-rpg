@@ -9,14 +9,22 @@ export async function GET(req, { params }) {
   console.log("==============================");
 
   try {
-    const decodedToken = await verifyFirebaseIdToken(req);
-    const user = await getUserFromFirestore(decodedToken.email);
+    let user = null;
+    const authHeader = req.headers.get("Authorization");
+    if (authHeader) {
+      const decodedToken = await verifyFirebaseIdToken(req);
+      user = await getUserFromFirestore(decodedToken.email);
+    }
+
     const games = await getGames();
-    const userGames = games.filter((game) => user.games.map(game => game.gameName)?.includes(game.id));
 
     if (!user) {
-      return new Response(JSON.stringify({ error: "User not found, access denied" }), { status: 403 });
+      return new Response(JSON.stringify({ 
+        games: games?.filter(game => game.availability !== 'private') 
+      }), { status: 200 });
     }
+
+    const userGames = games.filter((game) => user.games.map(game => game.gameName)?.includes(game.id));
 
     return new Response(JSON.stringify({
       games,
