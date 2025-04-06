@@ -39,6 +39,11 @@ function Landing() {
     }
   }, [user, data]);
 
+  // Reset `data` when `user` changes
+  useEffect(() => {
+    setData(null); // Clear data to force re-fetch and refresh the view
+  }, [user]);
+
   console.log("CLIENT: Landing state", data);
 
   if(!user) {
