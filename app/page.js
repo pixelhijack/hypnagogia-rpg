@@ -147,7 +147,7 @@ function Landing() {
                 <p>
                   <span className="highlightedText">{game.introduction}</span>
                   <br/>
-                  <button style={{ margin: '10px 0 0 0', float: 'right', border: '1px solid grey'}}>Folytatás →</button>
+                  <button>Folytatás →</button>
                 </p>
               </div>
             </Link>
@@ -168,11 +168,6 @@ function Landing() {
                 <br/>
                 <button
                   onClick={() => handleJoinGame(game.id)}
-                  style={{
-                    margin: '10px 0 0 0',
-                    float: 'right',
-                    border: '1px solid grey',
-                  }}
                   disabled={joiningGameIds.includes(game.id)} // Disable button if already joined
                 >
                   {joiningGameIds.includes(game.id)
@@ -195,6 +190,10 @@ function Landing() {
                 </h2>
                 <p>
                   <span className="highlightedText">{game.introduction}</span>
+                  <br/><br/>
+                <button>
+                  {"Játék kezdése →"}
+                </button>
                 </p>
               </div>
             </Link>

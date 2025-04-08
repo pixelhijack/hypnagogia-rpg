@@ -210,6 +210,13 @@ blockquote {
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 0.8) 100%);
 }
 
+.gameCard button {
+  margin: 10px 0 0 0;
+  float: right;
+  border: 1px solid grey;
+  background-color: rgba(0, 0, 0, 0.5); 
+}
+
 /* Highlight effect for text */
 .highlightedText {
   display: inline; /* Ensures the background only wraps around the text */
