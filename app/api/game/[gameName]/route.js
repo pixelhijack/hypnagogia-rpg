@@ -13,12 +13,12 @@ export async function GET(req, { params }) {
     const decodedToken = await verifyFirebaseIdToken(req);
     let user = await getUserFromFirestore(decodedToken.email);
     const games = await getGames();
-    const currentGame = games.find((game) => game.name === gameName);
+    const currentGame = games.find((game) => game.id === gameName);
     if (!currentGame) {
       return new Response(JSON.stringify({ error: "Game not found" }), { status: 404 });
     }
 
-    const userGames = games.filter((game) => user.games.map(game => game.gameName)?.includes(game.name));
+    const userGames = games.filter((game) => user.games.map(game => game.gameName)?.includes(game.id));
     
     const additionalUserInfo = user.games.find((game) => game.gameName === gameName);
     

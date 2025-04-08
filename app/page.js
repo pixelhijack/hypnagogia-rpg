@@ -81,10 +81,13 @@ function Landing() {
       <>
         <h1>Kalandjáték - csak beavatottaknak</h1>
         <div style={{ maxWidth: '500px', margin: '0 auto' }}>
+          <blockquote style={{ fontSize: '1.2em', fontStyle: 'italic', marginBottom: '20px' }}>
+            "Na ide figyelj, a te könyveid...biztonságosak."
+          </blockquote>
           <h3>Mi ez az oldal?</h3>
           <p>
             Emlékszel még azokra a régi könyvekre, amikben a történet folytatásához lapozni kellett?
-            Esetleg a mesélős játékokra, amit a Stranger Thingsben játszottak?
+            Esetleg a mesélős játékokra, amit az E.T. elején vagy a Stranger Thingsben játszottak?
             Teleportálj vissza a gyerekkorodba, és fedezd fel ugyanezt online is!
           </p>
           <h3>Játékos vagy már?</h3>
@@ -132,25 +135,29 @@ function Landing() {
       <h1>Isten hozott, {user.displayName}</h1>
       <h2>Aktív történeteid:</h2>
       {
-        user && data && data?.userGames?.map((game, i) => (
-          <Link key={i} href={`/${game.id}`} style={{ textDecoration: 'none' }}>
-            <div className={'gameCard'} style={{ backgroundImage: `url(${game.coverImage})` }}>
-              <h2>
-                <span className="highlightedText">{game.name}</span>
-              </h2>
-              <p>
-                <span className="highlightedText">{game.introduction}</span>
-                <br/>
-                <button style={{ margin: '10px 0 0 0', float: 'right', border: '1px solid grey'}}>Folytatás →</button>
-              </p>
-            </div>
-          </Link>
-        ))
+        user && data && data.userGames && data.userGames
+          .filter(game => data.userGames.some(userGame => userGame.id === game.id))
+          .filter(game => game.type !== 'singleplayer')
+          .map((game, i) => (
+            <Link key={i} href={`/${game.id}`} style={{ textDecoration: 'none' }}>
+              <div className={'gameCard'} style={{ backgroundImage: `url(${game.coverImage})` }}>
+                <h2>
+                  <span className="highlightedText">{game.name}</span>
+                </h2>
+                <p>
+                  <span className="highlightedText">{game.introduction}</span>
+                  <br/>
+                  <button style={{ margin: '10px 0 0 0', float: 'right', border: '1px solid grey'}}>Folytatás →</button>
+                </p>
+              </div>
+            </Link>
+          ))
       }
       <h2>Más történetek, amikre jelentkezhetsz játékosnak: </h2>
       {
         user && data?.games && data.userGames && data?.games
           .filter(game => !data.userGames.some(userGame => userGame.id === game.id)) // Exclude already displayed userGames
+          .filter(game => game.type !== 'singleplayer')
           .map((game, i) => (
             <div key={i} className={'gameCard'} style={{ backgroundImage: `url(${game.coverImage})` }}>
               <h2>
@@ -174,6 +181,23 @@ function Landing() {
                 </button>
               </p>
             </div>
+          ))
+      }
+      <h2>Egyedül is játszható, klasszikus lapozgatós könyvek: </h2>
+      {
+        user && data?.games && data.userGames && data?.games
+          .filter(game => game.type === 'singleplayer')
+          .map((game, i) => (
+            <Link key={i} href={`/${game.id}/0`} style={{ textDecoration: 'none' }}>
+              <div className={'gameCard'} style={{ backgroundImage: `url(${game.coverImage})` }}>
+                <h2>
+                  <span className="highlightedText">{game.name}</span>
+                </h2>
+                <p>
+                  <span className="highlightedText">{game.introduction}</span>
+                </p>
+              </div>
+            </Link>
           ))
       }
       <br />

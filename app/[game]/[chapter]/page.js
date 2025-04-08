@@ -1,22 +1,24 @@
-'use client';
+"use client";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../../layout";
+import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import LoadingAnimation from "../../components/LoadingAnimation";
 
-import React, { useEffect, useState } from 'react';
-import { useData } from '../../context/DataContext';
-import { useAuth } from '../../layout';
-import { useParams } from 'next/navigation';
-
-function Chapter() {
-  const { data: data, setData } = useData();
+function NumberedBook() {
+  const [data, setData] = useState();
   const { game, chapter } = useParams();
-  const { user, handleSignIn, handleSignOut } = useAuth();
-  const [selectedChapter, setSelectedChapter] = useState(null); // State for selected chapter
+  const { user, handleSignIn } = useAuth();
+  const [selectedChapter, setSelectedChapter] = useState(null);
+  const [isLeftColumnOpen, setIsLeftColumnOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
-    if (user && !data) {
+    if (user && !data?.githubData && !data?.error) {
       user.getIdToken().then((idToken) => {
         fetch(`/api/game/${game}`, {
           headers: {
-            Authorization: `Bearer ${idToken}`, // Pass Firebase ID token in Authorization header
+            Authorization: `Bearer ${idToken}`,
           },
         })
           .then((response) => response.json())
@@ -24,15 +26,76 @@ function Chapter() {
             console.log("CLIENT: /api/games response", json);
             setData(json);
             if (json.githubData?.chapters?.length > 0) {
-              setSelectedChapter(json.githubData.chapters[0]); // Default to the first chapter
+              setSelectedChapter(json.githubData.chapters[chapter]);
             }
           })
           .catch((error) => {
             console.log("ERROR: /api/games", error);
+            setData({ error: "Disaster happened. Please try again later." });
           });
       });
     }
-  }, [user, data]);
+  }, [user]);
+
+  // Inline component to process and render chapter content
+  const ChapterContent = ({ content }) => {
+    if (!content) return null;
+
+    // Split the content by <a> tags and process links
+    const parts = [];
+    const regex = /<a href="([^"]+)">([^<]+)<\/a>/g;
+    let lastIndex = 0;
+    let match;
+
+    while ((match = regex.exec(content)) !== null) {
+      // Add the text before the link
+      if (match.index > lastIndex) {
+        parts.push({
+          type: "text",
+          content: content.slice(lastIndex, match.index),
+        });
+      }
+
+      // Add the link
+      parts.push({
+        type: "link",
+        href: match[1],
+        text: match[2],
+      });
+
+      lastIndex = regex.lastIndex;
+    }
+
+    // Add the remaining text after the last link
+    if (lastIndex < content.length) {
+      parts.push({
+        type: "text",
+        content: content.slice(lastIndex),
+      });
+    }
+
+    // Render the parts
+    return (
+      <div>
+        {parts.map((part, index) => {
+          if (part.type === "text") {
+            return (
+              <span
+                key={index}
+                dangerouslySetInnerHTML={{ __html: part.content }}
+              />
+            );
+          } else if (part.type === "link") {
+            return (
+              <Link key={index} href={part.href}>
+                {part.text}
+              </Link>
+            );
+          }
+        })}
+      </div>
+    );
+  };
 
   if (!user) {
     return (
@@ -44,37 +107,57 @@ function Chapter() {
     );
   }
 
-  if (!data) {
+  if (data?.error) {
     return (
       <>
-        <h1>Loading...</h1>
+        <h1>{data.error}</h1>
       </>
     );
   }
 
-  return (
-    <div className="chapterWrapper">
-      {/* Left Column: List of Chapters */}
-      <div className="leftColumn">
-        <h2>Fejezet</h2>
-        {data.githubData?.chapters.map((chapter, index) => (
-          <div
-            key={index}
-            className={`chapterItem ${selectedChapter?.name === chapter.name ? 'selected' : ''}`}
-            onClick={() => setSelectedChapter(chapter)} // Set the selected chapter
-          >
-            {chapter.name}
-          </div>
-        ))}
-      </div>
+  if (!data?.githubData) {
+    return (
+      <h1>
+        <LoadingAnimation />
+      </h1>
+    );
+  }
 
-      {/* Right Column: Selected Chapter Content */}
+  return (
+    <div className={`chapterWrapper ${data?.currentGame?.type}`}>
+      <button
+        className="hamburgerButton"
+        onClick={() => setIsLeftColumnOpen(!isLeftColumnOpen)}
+      >
+        {isLeftColumnOpen ? "✖" : "☰"}
+      </button>
+
+      {data?.currentGame?.type !== 'singleplayer' && (
+        <div className={`leftColumn ${isLeftColumnOpen ? "open" : "collapsed"}`}>
+          <h2>Tartalom</h2>
+          {data.githubData?.chapters.map((chapter, index) => (
+            <div
+              key={index}
+              className={`chapterItem ${
+                selectedChapter?.name === chapter.name ? "selected" : ""
+              }`}
+              onClick={() => {
+                setIsLeftColumnOpen(false);
+                setSelectedChapter(chapter);
+              }}
+            >
+              {chapter.title}
+            </div>
+          ))}
+        </div>
+      )}
+
       <div className="rightColumn">
-        <h2>{selectedChapter?.name || 'Select a Chapter'}</h2>
-        <p>{selectedChapter?.content || 'No content available'}</p>
+        <h1>{selectedChapter?.title}</h1>
+        <ChapterContent content={selectedChapter?.content} />
       </div>
     </div>
   );
 }
 
-export default Chapter;
+export default NumberedBook;

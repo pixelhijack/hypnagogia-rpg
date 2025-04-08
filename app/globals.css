@@ -95,6 +95,15 @@ blockquote {
   margin: 30px 0;
 }
 
+.chapterWrapper.singleplayer .leftColumn, 
+.chapterWrapper.singleplayer .hamburgerButton{
+  display: none;
+}
+
+.chapterWrapper.singleplayer .rightColumn a{
+  text-decoration: underline;
+}
+
 .hamburgerButton {
   display: none;
 }

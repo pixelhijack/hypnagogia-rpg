@@ -1,9 +1,13 @@
+import { json } from "stream/consumers";
+
 const GITHUB_REPO = "pixelhijack/rpg-scenes";
 const GITHUB_BRANCH = "master";
 const GITHUB_ACCESS_TOKEN = process.env.GITHUB_ACCESS_TOKEN; // Securely store token
 
 export async function getGithubFiles(gameName = 'madrapur') {
   try {
+    let chapters = [];
+
     const fileListUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${gameName}?ref=${GITHUB_BRANCH}`;
     const headers = GITHUB_ACCESS_TOKEN ? { Authorization: `token ${GITHUB_ACCESS_TOKEN}` } : {};
 
@@ -13,6 +17,13 @@ export async function getGithubFiles(gameName = 'madrapur') {
 
     const files = await fileListResponse.json();
     const markdownFiles = files.filter(file => file.name.endsWith(".md"));
+    const jsonFiles = files.filter(file => file.name.endsWith(".json"));
+
+    if(jsonFiles.length > 0) {
+      const jsonFileResponse = await fetch(jsonFiles[0].download_url);
+      chapters = await jsonFileResponse.json();
+      return { chapters };
+    }
 
     const chapterPromises = markdownFiles.map(async (file) => {
       const fileResponse = await fetch(file.download_url);
@@ -25,7 +36,7 @@ export async function getGithubFiles(gameName = 'madrapur') {
       };
     });
 
-    const chapters = await Promise.all(chapterPromises);
+    chapters = await Promise.all(chapterPromises);
 
     /*
     const imageListUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${gameName}/images?ref=${GITHUB_BRANCH}`;
