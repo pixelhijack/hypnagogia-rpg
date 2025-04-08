@@ -182,22 +182,25 @@ function Landing() {
       {
         user && data?.games && data.userGames && data?.games
           .filter(game => game.type === 'singleplayer')
-          .map((game, i) => (
-            <Link key={i} href={`/${game.id}/0`} style={{ textDecoration: 'none' }}>
-              <div className={'gameCard'} style={{ backgroundImage: `url(${game.coverImage})` }}>
-                <h2>
-                  <span className="highlightedText">{game.name}</span>
-                </h2>
-                <p>
-                  <span className="highlightedText">{game.introduction}</span>
-                  <br/><br/>
-                <button>
-                  {"Játék kezdése →"}
-                </button>
-                </p>
-              </div>
-            </Link>
-          ))
+          .map((game, i) => {
+            const cachedChapter = localStorage.getItem(`chapterNo:${game.id}`);
+            const gameChapter = cachedChapter ? `/${game.id}/${JSON.parse(cachedChapter)}` : `/${game.id}/0`;
+            return (
+              <Link key={i} href={gameChapter} style={{ textDecoration: 'none' }}>
+                <div className={'gameCard'} style={{ backgroundImage: `url(${game.coverImage})` }}>
+                  <h2>
+                    <span className="highlightedText">{game.name}</span>
+                  </h2>
+                  <p>
+                    <span className="highlightedText">{game.introduction}</span>
+                    <br/><br/>
+                  <button>
+                    {cachedChapter ? "Folytasd ahol abbahagytad →" : "Játék kezdése →"}
+                  </button>
+                  </p>
+                </div>
+              </Link>
+            )})
       }
       <br />
       <button onClick={() => {

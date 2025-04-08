@@ -13,6 +13,9 @@ function NumberedBook() {
   const [isLeftColumnOpen, setIsLeftColumnOpen] = useState(false);
 
   const BOOK_CACHE = `gameData:${game}`; // Cache key based on the game title
+  const CHAPTER_NO_CACHE = `chapterNo:${game}`; // Cache key for chapter number
+
+  localStorage.setItem(CHAPTER_NO_CACHE, chapter); // Store the chapter number in local storage
 
   useEffect(() => {
     if (user && !data?.githubData && !data?.error) {
