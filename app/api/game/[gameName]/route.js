@@ -66,8 +66,8 @@ export async function GET(req, { params }) {
           content: processMarkdownContent(chapter.content, user)
         })).filter((chapter) => chapter.content.length > 0)
       };
-      cacheTime = process.env.NODE_ENV === 'development' ? 60000 : 5*60000; // 1 min in development, 5 mins in production
-      setCache(cacheKey, githubData, 60000); // Cache for 60 seconds
+      const cacheTime = process.env.NODE_ENV === 'development' ? 60000 : 5*60000; // 1 min in development, 5 mins in production
+      setCache(cacheKey, githubData, cacheTime); // Cache for 60 seconds
     }
     return new Response(JSON.stringify({
       githubData,
