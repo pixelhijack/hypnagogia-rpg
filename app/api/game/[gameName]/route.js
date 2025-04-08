@@ -36,18 +36,13 @@ export async function GET(req, { params }) {
       shortName: userInGame?.shortName || 'anonymous',
     };
 
-    if(process.env.NODE_ENV !== 'development') {
+    if (process.env.NODE_ENV !== 'development') {
       // Track the visit in the "analytics" collection
-      await adminDb.collection("analytics").add(
-        {
-          visits: FieldValue.arrayUnion({
-            gameName: gameName,
-            userEmail: user.email,
-            timestamp: new Date(),
-          }),
-        },
-        { merge: true } // Merge with existing data instead of overwriting
-      );
+      await adminDb.collection("analytics").add({
+        gameName: gameName,
+        userEmail: user.email,
+        timestamp: new Date(),
+      });
     }
 
     // Check cache for GitHub files
