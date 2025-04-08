@@ -2,7 +2,7 @@ import { verifyFirebaseIdToken, getUserFromFirestore, getGames } from "../../../
 import { getGithubFiles, sliceMarkdownByAtNames, extractTitleFromMarkdown } from "../../../utils/githubUtils";
 import { getCache, setCache } from "../../../utils/cache";
 import { marked } from "marked";
-import { adminDb } from "../../../firebaseAdmin"; 
+import { adminDb, FieldValue } from "../../../firebaseAdmin"; 
 
 
 export async function GET(req, { params }) {
@@ -36,13 +36,18 @@ export async function GET(req, { params }) {
       shortName: userInGame?.shortName || 'anonymous',
     };
 
-    if (process.env.NODE_ENV !== 'development') {
+    if (process.env.NODE_ENV === 'development') {
       // Track the visit in the "analytics" collection
-      await adminDb.collection("analytics").add({
-        gameName: gameName,
-        userEmail: user.email,
-        timestamp: new Date(),
-      });
+      const docRef = adminDb.collection("analytics").doc(gameName);
+      await docRef.set(
+        {
+          [gameName]: FieldValue.arrayUnion({
+            userEmail: user.email,
+            timestamp: new Date(),
+          }),
+        },
+        { merge: true } // Merge to avoid overwriting the document
+      );
     }
 
     // Check cache for GitHub files
