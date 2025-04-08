@@ -11,10 +11,22 @@ function NumberedBook() {
   const { user, handleSignIn } = useAuth();
   const [selectedChapter, setSelectedChapter] = useState(null);
   const [isLeftColumnOpen, setIsLeftColumnOpen] = useState(false);
-  const router = useRouter();
+
+  const BOOK_CACHE = `gameData:${game}`; // Cache key based on the game title
 
   useEffect(() => {
     if (user && !data?.githubData && !data?.error) {
+      // Check if data is already cached
+      const cachedData = localStorage.getItem(BOOK_CACHE);
+      if (cachedData) {
+        console.log("Using cached game data");
+        const cachedGithubData = JSON.parse(cachedData);
+        setData({ githubData: cachedGithubData });
+        setSelectedChapter(cachedGithubData.chapters[chapter]);
+        return;
+      }
+
+      // Fetch game data from the server to override the cache
       user.getIdToken().then((idToken) => {
         fetch(`/api/game/${game}`, {
           headers: {
@@ -26,6 +38,7 @@ function NumberedBook() {
             console.log("CLIENT: /api/games response", json);
             setData(json);
             if (json.githubData?.chapters?.length > 0) {
+              localStorage.setItem(BOOK_CACHE, JSON.stringify(json.githubData)); // Cache the data
               setSelectedChapter(json.githubData.chapters[chapter]);
             }
           })
@@ -124,7 +137,7 @@ function NumberedBook() {
   }
 
   return (
-    <div className={`chapterWrapper ${data?.currentGame?.type}`}>
+    <div className={`chapterWrapper public`}>
       <button
         className="hamburgerButton"
         onClick={() => setIsLeftColumnOpen(!isLeftColumnOpen)}
@@ -132,7 +145,7 @@ function NumberedBook() {
         {isLeftColumnOpen ? "✖" : "☰"}
       </button>
 
-      {data?.currentGame?.type !== 'singleplayer' && (
+      {/* data?.currentGame?.type !== 'singleplayer' && (
         <div className={`leftColumn ${isLeftColumnOpen ? "open" : "collapsed"}`}>
           <h2>Tartalom</h2>
           {data.githubData?.chapters.map((chapter, index) => (
@@ -150,7 +163,7 @@ function NumberedBook() {
             </div>
           ))}
         </div>
-      )}
+      ) */}
 
       <div className="rightColumn">
         <h1>{selectedChapter?.title}</h1>

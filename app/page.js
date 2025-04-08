@@ -200,7 +200,15 @@ function Landing() {
           ))
       }
       <br />
-      <button onClick={handleSignOut}>Kilépés Google fiókból</button>
+      <button onClick={() => {
+        handleSignOut();
+        // Clear all cache keys starting with "gameData:"
+        Object.keys(localStorage).forEach((key) => {
+          if (key.startsWith("gameData:")) {
+            localStorage.removeItem(key);
+          }
+        });
+      }}>Kilépés Google fiókból</button>
     </>
   )
 }

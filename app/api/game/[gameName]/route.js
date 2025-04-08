@@ -2,7 +2,7 @@ import { verifyFirebaseIdToken, getUserFromFirestore, getGames } from "../../../
 import { getGithubFiles, sliceMarkdownByAtNames, extractTitleFromMarkdown } from "../../../utils/githubUtils";
 import { getCache, setCache } from "../../../utils/cache";
 import { marked } from "marked";
-import { adminDb, FieldValue } from "../../../firebaseAdmin"; 
+import { adminDb } from "../../../firebaseAdmin"; 
 
 
 export async function GET(req, { params }) {
