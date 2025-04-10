@@ -41,7 +41,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: normal;
 }
 h1, h2, h3 {
-  padding: 20px 0;
+  padding: 20px 10px;
 }
 
 * {
@@ -130,6 +130,8 @@ blockquote {
 
 .rightColumn p img {
   max-width: 100%;
+  margin: 25px auto;
+  display: block;
 }
 
 .rightColumn hr {
