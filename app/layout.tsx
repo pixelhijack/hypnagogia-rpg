@@ -9,6 +9,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChang
 import { auth } from './firebase';
 import { DataProvider } from './context/DataContext';
 import Link from 'next/link';
+import { StyleProvider, useStyle } from './context/StyleProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -59,10 +60,11 @@ export function useAuth() {
 }
 
 // RootLayout component
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+function RootLayout({ children }: { children: React.ReactNode }) {
+  const { gameStyle } = useStyle();
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className} style={gameStyle}>
         <AuthProvider>
           <DataProvider>
             <header className={styles.header}>
@@ -76,3 +78,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+
+const StyledRoodLayout = (props: any) => {
+  return (
+    <StyleProvider>
+      <RootLayout {...props} />
+    </StyleProvider>
+  );
+}
+
+export default StyledRoodLayout;

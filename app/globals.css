@@ -75,7 +75,8 @@ button {
 
 input, textarea {
   padding: 10px;
-  min-width: 400px;
+  width: 80%;
+  max-width: 100%;
 }
 
 
@@ -93,6 +94,14 @@ blockquote {
   height: 100vh;
   max-width: 100%;
   margin: 30px 0;
+  overflow: hidden;
+}
+
+.chapterWrapper.dark {
+  background-color: rgba(0,0,0,0.8);
+}
+.chapterWrapper.light {
+  background-color: rgba(255,255,255,0.8);
 }
 
 .chapterWrapper.singleplayer .leftColumn, 
@@ -152,6 +161,20 @@ blockquote {
   background-color: #f0f0f0;
   color: black;
 }
+.light .chapterItem {
+  color: black;
+}
+.dark .chapterItem {
+  color: white;
+}
+.light .chapterItem.selected {
+  background-color: black;
+  color: white;
+}
+.dark .chapterItem.selected {
+  background-color: #f0f0f0;
+  color: black;
+}
 
 .gameCard {
   width: 100%; 
@@ -185,9 +208,17 @@ blockquote {
     left: 0;
     height: 100%;
     width: 70%; /* Adjust width for mobile */
-    background-color: var(--background);
     z-index: 5;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+  }
+
+  .dark .leftColumn {
+    background-color: black;
+    color: white;
+  }
+  .light .leftColumn {
+    background-color: #f0f0f0;
+    color: black;
   }
 
   /* Left Column: Collapsed State */

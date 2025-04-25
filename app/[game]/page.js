@@ -4,10 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { useData } from '../context/DataContext';
 import { useAuth } from '../layout';
 import { useParams } from 'next/navigation';
+import { useStyle } from '../context/StyleProvider';
 import InteractionForm from '../components/InteractionForm';
 import LoadingAnimation from '../components/LoadingAnimation';
 
 function Chapter() {
+  const { setGameStyle, gameStyle } = useStyle();  // game specific styles from firebase
   const [ data, setData ] = useState();
   const { game } = useParams();
   const { user, handleSignIn, handleSignOut } = useAuth();
@@ -47,6 +49,12 @@ function Chapter() {
           .then((json) => {
             console.log("CLIENT: /api/games response", json);
             setData(json);
+
+            // Apply game-specific styles
+            if (json?.currentGame?.style) {
+              setGameStyle(json.currentGame.style); // Update the global styles
+            }
+
             // By default open on the last chapter
             if (json.githubData?.chapters?.length > 0) {
               setSelectedChapter(json.githubData.chapters[json.githubData.chapters.length - 1]); // Default to the last chapter
@@ -95,7 +103,7 @@ function Chapter() {
   }
 
   return (
-    <div className="chapterWrapper">
+    <div className={`chapterWrapper ${data?.currentGame?.style?.color === 'black' ? 'light' : 'dark'}`}>
       {/* Hamburger Icon for Mobile */}
       <button
         className="hamburgerButton"
